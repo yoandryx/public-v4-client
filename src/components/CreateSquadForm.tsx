@@ -1,4 +1,3 @@
-'use client';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Member, createMultisig } from '@/lib/createSquad';

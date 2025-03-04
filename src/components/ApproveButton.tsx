@@ -1,4 +1,3 @@
-'use client';
 import { PublicKey, Transaction } from '@solana/web3.js';
 import { Button } from './ui/button';
 import * as multisig from '@sqds/multisig';
