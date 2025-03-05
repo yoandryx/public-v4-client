@@ -13,7 +13,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover
 import { useVaultIndex } from '~/hooks/useVaultIndex';
 
 // Generate vault indices from 0 to 15
-const vaultIndices = Array.from({ length: 16 }, (_, index) => ({
+const vaultIndices = Array.from({ length: 256 }, (_, index) => ({
   value: index.toString(),
   label: `Vault ${index}`,
 }));
