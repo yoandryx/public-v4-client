@@ -1,3 +1,10 @@
+## [1.0.9](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.8...v1.0.9) (2025-03-05)
+
+
+### Bug Fixes
+
+* **vault-select:** added all 256 vaults ([09e8ebf](https://github.com/Squads-Protocol/public-v4-client/commit/09e8ebfdae739549edf9a85a323ab47669f90cd8))
+
 ## [1.0.8](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.7...v1.0.8) (2025-03-05)
 
 
