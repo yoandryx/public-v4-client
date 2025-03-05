@@ -13,7 +13,7 @@ import { useMultisigData } from '@/hooks/useMultisigData';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-const TRANSACTIONS_PER_PAGE = 2;
+const TRANSACTIONS_PER_PAGE = 10;
 
 export default function TransactionsPage() {
   const location = useLocation();
