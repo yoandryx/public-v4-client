@@ -1,9 +1,13 @@
-"use client"
-
 import { Toaster as Sonner } from "sonner"
 
-type ToasterProps = React.ComponentProps<typeof Sonner>
+type SonnerProps = React.ComponentProps<typeof Sonner>
 
+type ToasterProps = SonnerProps & {
+    icons?: {
+        error?: React.ReactNode
+        success?: React.ReactNode
+    }
+}
 const Toaster = ({ ...props }: ToasterProps) => {
 
   return (

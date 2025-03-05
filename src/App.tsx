@@ -11,7 +11,7 @@ import ConfigPage from "./routes/config";
 import CreatePage from "./routes/create";
 import SettingsPage from "./routes/settings";
 import TransactionsPage from "./routes/transactions";
-import {Routes, Route, BrowserRouter} from "react-router-dom";
+import {Routes, Route, HashRouter} from "react-router-dom";
 
 import "./styles/global.css"; // ✅ Load Tailwind styles
 
@@ -22,7 +22,7 @@ const App = () => {
     return (
         <QueryClientProvider client={queryClient}>
             <Wallet>
-            <BrowserRouter>
+            <HashRouter>
             <div className="flex flex-col md:flex-row h-screen min-w-full bg-white">
                 <TabNav/>
 
@@ -43,15 +43,15 @@ const App = () => {
 
             </div>
 
-            {/*<Toaster*/}
-            {/*    expand*/}
-            {/*    visibleToasts={3}*/}
-            {/*    icons={{*/}
-            {/*        error: <AlertTriangle className="w-4 h-4 text-red-600"/>,*/}
-            {/*        success: <CheckSquare className="w-4 h-4 text-green-600"/>,*/}
-            {/*    }}*/}
-            {/*/>*/}
-            </BrowserRouter>
+            <Toaster
+                expand
+                visibleToasts={3}
+                icons={{
+                    error: <AlertTriangle className="w-4 h-4 text-red-600"/>,
+                    success: <CheckSquare className="w-4 h-4 text-green-600"/>,
+                }}
+            />
+            </HashRouter>
             </Wallet>
         </QueryClientProvider>
     );
