@@ -7,7 +7,7 @@ module.exports = merge(common, {
     mode: "development",
     devServer: {
         static: {
-            directory: path.resolve(__dirname, "public"), // ✅ Serve the public folder
+            directory: path.resolve(__dirname, "public"),
             publicPath: "/",
         },
         historyApiFallback: true,
