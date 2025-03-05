@@ -1,3 +1,10 @@
+## [1.0.6](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.5...v1.0.6) (2025-03-05)
+
+
+### Bug Fixes
+
+* **threshold:** threshold form cleanup ([3041073](https://github.com/Squads-Protocol/public-v4-client/commit/3041073f2087b75b52beb6dab365e9b8083db1c6))
+
 ## [1.0.5](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.4...v1.0.5) (2025-03-05)
 
 
