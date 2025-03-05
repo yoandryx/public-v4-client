@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.0...v1.0.1) (2025-03-05)
+
+
+### Bug Fixes
+
+* **hash-router:** added hashrouter for routes ([bfa3f4a](https://github.com/Squads-Protocol/public-v4-client/commit/bfa3f4a3499c320716a4e37e14c2fcd0c65d3b81))
+
 # 1.0.0 (2025-03-05)
 
 
