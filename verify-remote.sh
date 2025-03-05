@@ -3,15 +3,23 @@
 set -e  # Exit on error
 set -o pipefail  # Catch errors in pipes
 
-EXPECTED_HASH=$(cat squads-public-build/hash.txt)
-
+# Check if a URL is provided
 if [ -z "$1" ]; then
     echo "❌ Error: No URL provided."
-    echo "Usage: $0 <URL>"
+    echo "Usage: $0 <URL> [EXPECTED_HASH]"
     exit 1
 fi
 
 REMOTE_URL="$1"
+
+# If a hash is provided, use it; otherwise, run build.sh and use squads-public-build/hash.txt
+if [ -n "$2" ]; then
+    EXPECTED_HASH="$2"
+else
+    echo "🔨 Running build.sh to generate reference hash..."
+    ./build.sh
+    EXPECTED_HASH=$(cat squads-public-build/hash.txt)
+fi
 
 # Temporary directory for verification
 VERIFY_DIR="squads-public-verify"
