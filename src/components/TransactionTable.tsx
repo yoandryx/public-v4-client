@@ -57,7 +57,7 @@ export default function TransactionTable({
               </Link>
             </TableCell>
             <TableCell>
-              {transaction.proposal?.status.__kind || 'None'} {stale ? ' (stale)' : ''}
+              {stale ? '(stale)' : transaction.proposal?.status.__kind || 'None'}
             </TableCell>
             <TableCell>
               {!stale ? (
