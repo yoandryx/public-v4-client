@@ -5,6 +5,7 @@ import * as multisig from '@sqds/multisig';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import { toast } from 'sonner';
+import { useAccess } from '../hooks/useAccess';
 
 type RemoveMemberButtonProps = {
   rpcUrl: string;
@@ -23,7 +24,7 @@ const RemoveMemberButton = ({
 }: RemoveMemberButtonProps) => {
   const wallet = useWallet();
   const walletModal = useWalletModal();
-
+  const isMember = useAccess();
   const member = new PublicKey(memberKey);
 
   const connection = new Connection(rpcUrl, { commitment: 'confirmed' });
@@ -83,7 +84,7 @@ const RemoveMemberButton = ({
   };
   return (
     <Button
-      disabled={false}
+      disabled={!isMember}
       onClick={() =>
         toast.promise(removeMember, {
           id: 'transaction',
