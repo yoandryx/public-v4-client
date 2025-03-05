@@ -1,3 +1,10 @@
+## [1.0.11](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.10...v1.0.11) (2025-03-05)
+
+
+### Bug Fixes
+
+* **transactions:** show (stale) for deprecated txs ([a4ba9eb](https://github.com/Squads-Protocol/public-v4-client/commit/a4ba9ebfb902a3fc00b0ac7802351065f559cd67))
+
 ## [1.0.10](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.9...v1.0.10) (2025-03-05)
 
 
