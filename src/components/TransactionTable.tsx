@@ -5,6 +5,7 @@ import RejectButton from './RejectButton';
 import { TableBody, TableCell, TableRow } from './ui/table';
 import { useExplorerUrl, useRpcUrl } from '@/hooks/useSettings';
 import { Link } from 'react-router-dom';
+import { useMultisig } from '@/hooks/useServices';
 
 interface ActionButtonsProps {
   multisigPda: string;
@@ -27,6 +28,7 @@ export default function TransactionTable({
   programId?: string;
 }) {
   const { rpcUrl } = useRpcUrl();
+  const { data: multisigConfig } = useMultisig();
   if (transactions.length === 0) {
     return (
       <TableBody>
@@ -39,6 +41,10 @@ export default function TransactionTable({
   return (
     <TableBody>
       {transactions.map((transaction, index) => {
+        const stale =
+          (multisigConfig &&
+            Number(multisigConfig.staleTransactionIndex) > Number(transaction.index)) ||
+          false;
         return (
           <TableRow key={index}>
             <TableCell>{Number(transaction.index)}</TableCell>
@@ -50,14 +56,20 @@ export default function TransactionTable({
                 {transaction.transactionPda}
               </Link>
             </TableCell>
-            <TableCell>{transaction.proposal?.status.__kind || 'None'}</TableCell>
             <TableCell>
-              <ActionButtons
-                multisigPda={multisigPda!}
-                transactionIndex={Number(transaction.index)}
-                proposalStatus={transaction.proposal?.status.__kind || 'None'}
-                programId={programId ? programId : multisig.PROGRAM_ID.toBase58()}
-              />
+              {transaction.proposal?.status.__kind || 'None'} {stale ? ' (stale)' : ''}
+            </TableCell>
+            <TableCell>
+              {!stale ? (
+                <ActionButtons
+                  multisigPda={multisigPda!}
+                  transactionIndex={Number(transaction.index)}
+                  proposalStatus={transaction.proposal?.status.__kind || 'None'}
+                  programId={programId ? programId : multisig.PROGRAM_ID.toBase58()}
+                />
+              ) : (
+                <span>Stale</span>
+              )}
             </TableCell>
           </TableRow>
         );
