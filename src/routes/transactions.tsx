@@ -10,12 +10,16 @@ import CreateTransaction from '@/components/CreateTransactionButton';
 import TransactionTable from '@/components/TransactionTable';
 import { useMultisig, useTransactions } from '@/hooks/useServices';
 import { useMultisigData } from '@/hooks/useMultisigData';
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-const TRANSACTIONS_PER_PAGE = 5;
+const TRANSACTIONS_PER_PAGE = 2;
 
 export default function TransactionsPage() {
-  const pageParam = new URLSearchParams(window.location.search).get('page');
-  const page = pageParam ? parseInt(pageParam) : 1;
+  const location = useLocation();
+  const navigate = useNavigate();
+  const pageParam = new URLSearchParams(location.search).get('page');
+  const page = pageParam ? parseInt(pageParam, 10) : 1;
   const { multisigAddress, programId } = useMultisigData();
 
   const { data } = useMultisig();
@@ -52,8 +56,8 @@ export default function TransactionsPage() {
           <TableHeader>
             <TableRow>
               <TableHead>Index</TableHead>
-              <TableHead>Public Key</TableHead>
-              <TableHead>Proposal Status</TableHead>
+              <TableHead>Transaction Address</TableHead>
+              <TableHead>Status</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -69,8 +73,18 @@ export default function TransactionsPage() {
 
       <Pagination>
         <PaginationContent>
-          {page > 1 && <PaginationPrevious to={`/transactions?page=${page - 1}`} />}
-          {page < totalPages && <PaginationNext to={`/transactions?page=${page + 1}`} />}
+          {page > 1 && (
+            <PaginationPrevious
+              onClick={() => navigate(`/transactions?page=${page - 1}`)}
+              to={`/transactions?page=${page - 1}`}
+            />
+          )}
+          {page < totalPages && (
+            <PaginationNext
+              to={`/transactions?page=${page + 1}`}
+              onClick={() => navigate(`/transactions?page=${page + 1}`)}
+            />
+          )}
         </PaginationContent>
       </Pagination>
     </div>
