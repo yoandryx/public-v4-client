@@ -10,8 +10,9 @@ export function ChangeMultisig() {
   };
 
   return (
-    <Card className="w-fit my-3 pt-5">
+    <Card className="my-3 w-fit pt-5">
       <CardContent>
+        <div>Switch to a different Squad</div>
         <Button onClick={handleChangeMultisig}>Change</Button>
       </CardContent>
     </Card>
