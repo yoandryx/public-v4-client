@@ -1,3 +1,11 @@
+## [1.0.4](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.3...v1.0.4) (2025-03-05)
+
+
+### Bug Fixes
+
+* **explorer:** custom explorer link support ([956fd85](https://github.com/Squads-Protocol/public-v4-client/commit/956fd85033679cebaeac95abdac9b7cc01fe6c0d))
+* **remove-member:** added access hook on remove member ([3b996a5](https://github.com/Squads-Protocol/public-v4-client/commit/3b996a5396565168b51bc45dd837165a5ffaece2))
+
 ## [1.0.3](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.2...v1.0.3) (2025-03-05)
 
 
