@@ -19,7 +19,10 @@ export default function TransactionsPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const pageParam = new URLSearchParams(location.search).get('page');
-  const page = pageParam ? parseInt(pageParam, 10) : 1;
+  let page = pageParam ? parseInt(pageParam, 10) : 1;
+  if (page < 1) {
+    page = 1;
+  }
   const { multisigAddress, programId } = useMultisigData();
 
   const { data } = useMultisig();
