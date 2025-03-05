@@ -1,3 +1,10 @@
+## [1.0.7](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.6...v1.0.7) (2025-03-05)
+
+
+### Bug Fixes
+
+* **add-member:** added check to see if already exists ([54266eb](https://github.com/Squads-Protocol/public-v4-client/commit/54266ebb3f31fad0f8df562019e9919671abf017))
+
 ## [1.0.6](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.5...v1.0.6) (2025-03-05)
 
 
