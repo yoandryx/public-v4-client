@@ -1,3 +1,10 @@
+## [1.0.13](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.12...v1.0.13) (2025-03-05)
+
+
+### Bug Fixes
+
+* **transactions:** if page less than 1, set to 1 ([335551f](https://github.com/Squads-Protocol/public-v4-client/commit/335551f868e7b5770e0a24763442feed033ea2d9))
+
 ## [1.0.12](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.11...v1.0.12) (2025-03-05)
 
 
