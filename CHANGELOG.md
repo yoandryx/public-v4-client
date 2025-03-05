@@ -1,3 +1,10 @@
+## [1.0.8](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.7...v1.0.8) (2025-03-05)
+
+
+### Bug Fixes
+
+* **switch-squad:** added text to switch squads ([95b9c18](https://github.com/Squads-Protocol/public-v4-client/commit/95b9c18cbc9b37f6947178cc320b66805ec71359))
+
 ## [1.0.7](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.6...v1.0.7) (2025-03-05)
 
 
