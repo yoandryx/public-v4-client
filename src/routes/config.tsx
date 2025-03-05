@@ -1,5 +1,3 @@
-'use client';
-
 import AddMemberInput from '@/components/AddMemberInput';
 import ChangeThresholdInput from '@/components/ChangeThresholdInput';
 import ChangeUpgradeAuthorityInput from '@/components/ChangeUpgradeAuthorityInput';
@@ -9,13 +7,14 @@ import { clusterApiUrl } from '@solana/web3.js';
 import * as multisig from '@sqds/multisig';
 import { useMultisigData } from '@/hooks/useMultisigData';
 import { useMultisig } from '@/hooks/useServices';
+import { renderPermissions } from '@/lib/utils';
 
 const ConfigurationPage = () => {
   const { rpcUrl, multisigAddress, vaultIndex, programId } = useMultisigData();
   const { data: multisigConfig } = useMultisig();
   return (
     <div className="">
-      <h1 className="text-3xl font-bold mb-4">Multisig Configuration</h1>
+      <h1 className="mb-4 text-3xl font-bold">Multisig Configuration</h1>
       <Card>
         <CardHeader>
           <CardTitle>Members</CardTitle>
@@ -34,8 +33,7 @@ const ConfigurationPage = () => {
                         Public Key: {member.key.toBase58()}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        Permission Mask:
-                        {member.permissions.mask.toString()}
+                        Permissions: {renderPermissions(member.permissions.mask)}
                       </p>
                     </div>
                     <div className="ml-auto">
@@ -59,7 +57,7 @@ const ConfigurationPage = () => {
         </CardContent>
       </Card>
       <div className="flex pb-4">
-        <Card className="mt-4 w-1/2 mr-2">
+        <Card className="mr-2 mt-4 w-1/2">
           <CardHeader>
             <CardTitle>Add Member</CardTitle>
             <CardDescription>Add a member to the Multisig</CardDescription>
