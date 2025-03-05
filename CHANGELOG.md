@@ -1,3 +1,10 @@
+## [1.0.12](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.11...v1.0.12) (2025-03-05)
+
+
+### Bug Fixes
+
+* **transactions:** stale label in status ([52b5de3](https://github.com/Squads-Protocol/public-v4-client/commit/52b5de39c06b507e20115df23501703fc8334777))
+
 ## [1.0.11](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.10...v1.0.11) (2025-03-05)
 
 
