@@ -65,7 +65,6 @@ const ConfigurationPage = () => {
           <CardContent>
             <AddMemberInput
               multisigPda={multisigAddress!}
-              rpcUrl={rpcUrl || clusterApiUrl('mainnet-beta')}
               transactionIndex={Number(multisigConfig ? multisigConfig.transactionIndex : 0) + 1}
               programId={programId ? programId.toBase58() : multisig.PROGRAM_ID.toBase58()}
             />
