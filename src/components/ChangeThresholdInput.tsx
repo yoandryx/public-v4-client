@@ -6,6 +6,9 @@ import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import * as multisig from '@sqds/multisig';
 import { Connection, PublicKey, TransactionMessage, VersionedTransaction } from '@solana/web3.js';
 import { toast } from 'sonner';
+import { useMultisig } from '../hooks/useServices';
+import invariant from 'invariant';
+import { types as multisigTypes } from '@sqds/multisig';
 
 type ChangeThresholdInputProps = {
   multisigPda: string;
@@ -20,6 +23,7 @@ const ChangeThresholdInput = ({
   rpcUrl,
   programId,
 }: ChangeThresholdInputProps) => {
+  const { data: multisigConfig } = useMultisig();
   const [threshold, setThreshold] = useState('');
   const wallet = useWallet();
   const walletModal = useWalletModal();
@@ -27,10 +31,34 @@ const ChangeThresholdInput = ({
   const bigIntTransactionIndex = BigInt(transactionIndex);
   const connection = new Connection(rpcUrl, { commitment: 'confirmed' });
 
+  const countVoters = (members: multisig.types.Member[]) => {
+    return members.filter(
+      (member) =>
+        (member.permissions.mask & multisigTypes.Permission.Vote) === multisigTypes.Permission.Vote
+    ).length;
+  };
+
+  const validateThreshold = () => {
+    invariant(multisigConfig, 'Invalid multisig conf loaded');
+    const totalVoters = countVoters(multisigConfig.members);
+
+    if (parseInt(threshold, 10) < 1) {
+      return 'Threshold must be at least 1.';
+    }
+    if (parseInt(threshold) > totalVoters) {
+      return `Threshold cannot exceed ${totalVoters} (total voters).`;
+    }
+    return null; // Valid input
+  };
+
   const changeThreshold = async () => {
     if (!wallet.publicKey) {
       walletModal.setVisible(true);
       return;
+    }
+    const validateError = validateThreshold();
+    if (validateError) {
+      throw validateError;
     }
 
     const changeThresholdIx = multisig.instructions.configTransactionCreate({
@@ -82,7 +110,7 @@ const ChangeThresholdInput = ({
   return (
     <div>
       <Input
-        placeholder="Thresold Number"
+        placeholder={multisigConfig ? multisigConfig.threshold.toString() : ''}
         type="text"
         onChange={(e) => setThreshold(e.target.value)}
         className="mb-3"
@@ -96,7 +124,9 @@ const ChangeThresholdInput = ({
             error: (e) => `Failed to propose: ${e}`,
           })
         }
-        disabled={!threshold}
+        disabled={
+          !threshold || (!!multisigConfig && multisigConfig.threshold == parseInt(threshold, 10))
+        }
       >
         Change Threshold
       </Button>
