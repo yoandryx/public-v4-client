@@ -1,12 +1,13 @@
 import SetProgramIdInput from '@/components/SetProgramIdInput';
 import SetRpcUrlInput from '@/components/SetRpcUrlnput';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import SetExplorerInput from '../components/SetExplorerInput';
 
 const SettingsPage = () => {
   return (
     <main>
-      <h1 className="text-3xl font-bold mb-4">Settings</h1>
-      <div className="flex-col space-y-4 justify-start">
+      <h1 className="mb-4 text-3xl font-bold">Settings</h1>
+      <div className="flex-col justify-start space-y-4">
         <Card>
           <CardHeader>
             <CardTitle>RPC Url</CardTitle>
@@ -23,6 +24,15 @@ const SettingsPage = () => {
           </CardHeader>
           <CardContent>
             <SetProgramIdInput />
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Explorer</CardTitle>
+            <CardDescription>Change the explorer.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <SetExplorerInput />
           </CardContent>
         </Card>
       </div>

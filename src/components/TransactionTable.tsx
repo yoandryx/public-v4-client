@@ -3,8 +3,8 @@ import ApproveButton from './ApproveButton';
 import ExecuteButton from './ExecuteButton';
 import RejectButton from './RejectButton';
 import { TableBody, TableCell, TableRow } from './ui/table';
-import { useRpcUrl } from '@/hooks/useSettings';
-import {Link} from "react-router-dom";
+import { useExplorerUrl, useRpcUrl } from '@/hooks/useSettings';
+import { Link } from 'react-router-dom';
 
 interface ActionButtonsProps {
   multisigPda: string;
@@ -43,7 +43,10 @@ export default function TransactionTable({
           <TableRow key={index}>
             <TableCell>{Number(transaction.index)}</TableCell>
             <TableCell className="text-blue-500">
-              <Link to={createSolanaExplorerUrl(transaction.transactionPda, rpcUrl!)}>
+              <Link
+                target={`_blank`}
+                to={createSolanaExplorerUrl(transaction.transactionPda, rpcUrl!)}
+              >
                 {transaction.transactionPda}
               </Link>
             </TableCell>
@@ -94,7 +97,8 @@ function ActionButtons({
 }
 
 function createSolanaExplorerUrl(publicKey: string, rpcUrl: string): string {
-  const baseUrl = 'https://explorer.solana.com/address/';
+  const { explorerUrl } = useExplorerUrl();
+  const baseUrl = `${explorerUrl}/address/`;
   const clusterQuery = '?cluster=custom&customUrl=';
   const encodedRpcUrl = encodeURIComponent(rpcUrl);
 

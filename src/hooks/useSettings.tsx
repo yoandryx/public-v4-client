@@ -58,6 +58,34 @@ export const useProgramId = () => {
       queryClient.setQueryData(['programId'], newProgramId);
     },
   });
-
   return { programId, setProgramId };
+};
+
+// explorer url
+const DEFAULT_EXPLORER_URL = 'https://explorer.solana.com';
+const getExplorerUrl = () => {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('x-explorer-url') || DEFAULT_EXPLORER_URL;
+  }
+  return DEFAULT_PROGRAM_ID;
+};
+
+export const useExplorerUrl = () => {
+  const queryClient = useQueryClient();
+
+  const { data: explorerUrl } = useSuspenseQuery({
+    queryKey: ['explorerUrl'],
+    queryFn: () => Promise.resolve(getExplorerUrl()),
+  });
+
+  const setExplorerUrl = useMutation({
+    mutationFn: (newExplorerUrl: string) => {
+      localStorage.setItem('x-explorer-url', newExplorerUrl);
+      return Promise.resolve(newExplorerUrl);
+    },
+    onSuccess: (newExplorerUrl) => {
+      queryClient.setQueryData(['explorerUrl'], newExplorerUrl);
+    },
+  });
+  return { explorerUrl, setExplorerUrl };
 };
