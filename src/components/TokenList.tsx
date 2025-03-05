@@ -1,10 +1,10 @@
-'use client';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import SendTokens from './SendTokensButton';
 import SendSol from './SendSolButton';
 import { useMultisigData } from '~/hooks/useMultisigData';
 import { useBalance, useGetTokens } from '~/hooks/useServices';
+import {useAccess} from "../hooks/useAccess";
 
 type TokenListProps = {
   multisigPda: string;

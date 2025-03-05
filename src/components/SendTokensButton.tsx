@@ -29,6 +29,7 @@ import { toast } from 'sonner';
 import { isPublickey } from '~/lib/isPublickey';
 import { useMultisigData } from '~/hooks/useMultisigData';
 import { useQueryClient } from '@tanstack/react-query';
+import {useAccess} from "../hooks/useAccess";
 
 type SendTokensProps = {
   tokenAccount: string;
@@ -57,6 +58,7 @@ const SendTokens = ({
   const queryClient = useQueryClient();
   const parsedAmount = parseFloat(amount);
   const isAmountValid = !isNaN(parsedAmount) && parsedAmount > 0;
+  const isMember = useAccess();
 
   const transfer = async () => {
     if (!wallet.publicKey) {
@@ -159,6 +161,7 @@ const SendTokens = ({
     <Dialog>
       <DialogTrigger asChild>
         <Button
+          disabled={!isMember}
           onClick={(e) => {
             if (!wallet.publicKey) {
               e.preventDefault();
