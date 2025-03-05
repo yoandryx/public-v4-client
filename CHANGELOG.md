@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.1...v1.0.2) (2025-03-05)
+
+
+### Bug Fixes
+
+* **access:** useAccess hook added for member check ([a738957](https://github.com/Squads-Protocol/public-v4-client/commit/a738957f6cca520f4cf20a3847bcc3a0beb1c4df))
+
 ## [1.0.1](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.0...v1.0.1) (2025-03-05)
 
 
