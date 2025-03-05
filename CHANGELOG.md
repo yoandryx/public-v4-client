@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.2...v1.0.3) (2025-03-05)
+
+
+### Bug Fixes
+
+* **pagination:** fixed tx pagination on search/hash ([1d3ceef](https://github.com/Squads-Protocol/public-v4-client/commit/1d3ceef995fd3bd24bacd20c4e5c29677ad955c8))
+
 ## [1.0.2](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.1...v1.0.2) (2025-03-05)
 
 
