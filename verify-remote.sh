@@ -18,76 +18,85 @@ VERIFY_DIR="squads-public-verify"
 rm -rf "$VERIFY_DIR"
 mkdir -p "$VERIFY_DIR"
 
-# Ensure wget is installed
-if ! command -v wget &> /dev/null; then
-    echo "❌ Error: 'wget' is required but not installed."
-
-    # Prompt to install wget
+# Function to prompt user for installation
+install_package() {
+    PACKAGE=$1
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        echo "💡 Would you like to install 'wget' now? (y/n)"
-        read -r INSTALL_WGET
-        if [[ "$INSTALL_WGET" == "y" || "$INSTALL_WGET" == "Y" ]]; then
+        echo "💡 Would you like to install '$PACKAGE' now? (y/n)"
+        read -r INSTALL_CONFIRM
+        if [[ "$INSTALL_CONFIRM" == "y" || "$INSTALL_CONFIRM" == "Y" ]]; then
             if command -v apt &> /dev/null; then
-                sudo apt update && sudo apt install -y wget
+                sudo apt update && sudo apt install -y "$PACKAGE"
             elif command -v yum &> /dev/null; then
-                sudo yum install -y wget
+                sudo yum install -y "$PACKAGE"
             elif command -v pacman &> /dev/null; then
-                sudo pacman -S wget --noconfirm
+                sudo pacman -S "$PACKAGE" --noconfirm
             else
-                echo "❌ Error: Package manager not detected. Please install wget manually."
+                echo "❌ Error: Package manager not detected. Please install $PACKAGE manually."
                 exit 1
             fi
         else
-            echo "❌ wget is required. Please install it manually."
+            echo "❌ $PACKAGE is required. Please install it manually."
             exit 1
         fi
     elif [[ "$OSTYPE" == "darwin"* ]]; then
-        echo "💡 Would you like to install 'wget' using Homebrew? (y/n)"
-        read -r INSTALL_WGET
-        if [[ "$INSTALL_WGET" == "y" || "$INSTALL_WGET" == "Y" ]]; then
+        echo "💡 Would you like to install '$PACKAGE' using Homebrew? (y/n)"
+        read -r INSTALL_CONFIRM
+        if [[ "$INSTALL_CONFIRM" == "y" || "$INSTALL_CONFIRM" == "Y" ]]; then
             if command -v brew &> /dev/null; then
-                brew install wget
+                brew install "$PACKAGE"
             else
                 echo "❌ Error: Homebrew is not installed. Install it from https://brew.sh/"
                 exit 1
             fi
         else
-            echo "❌ wget is required. Please install it manually."
+            echo "❌ $PACKAGE is required. Please install it manually."
             exit 1
         fi
     else
-        echo "❌ Unsupported OS. Please install wget manually."
+        echo "❌ Unsupported OS. Please install $PACKAGE manually."
         exit 1
     fi
+}
+
+# Ensure wget is installed
+if ! command -v wget &> /dev/null; then
+    echo "❌ Error: 'wget' is required but not installed."
+    install_package "wget"
 fi
 
-echo "🌍 Downloading the hosted website from: $REMOTE_URL..."
+# Ensure jq is installed
+if ! command -v jq &> /dev/null; then
+    echo "❌ Error: 'jq' (JSON processor) is required but not installed."
+    install_package "jq"
+fi
 
-# Use wget to mirror the entire static site **with all dependencies**
-wget --mirror --convert-links --adjust-extension --page-requisites --no-parent --no-clobber --span-hosts --domains=$(echo "$REMOTE_URL" | awk -F/ '{print $3}') -P "$VERIFY_DIR" "$REMOTE_URL"
+echo "🌍 Fetching manifest from: $REMOTE_URL/manifest.json..."
 
-# Ensure download was successful
-if [ ! "$(ls -A "$VERIFY_DIR")" ]; then
-    echo "❌ Error: Downloaded files not found!"
+# Download the manifest first
+wget -q -O "$VERIFY_DIR/manifest.json" "$REMOTE_URL/manifest.json"
+
+if [ ! -f "$VERIFY_DIR/manifest.json" ]; then
+    echo "❌ Error: Manifest file not found at $REMOTE_URL/manifest.json"
     exit 1
 fi
 
-echo "🔍 Checking for missing files..."
-find "$VERIFY_DIR" -type f > downloaded_files.txt
-MISSING_FILES=0
+# Parse manifest to get file list
+echo "📜 Fetching files listed in manifest.json..."
+jq -r '.[]' "$VERIFY_DIR/manifest.json" | while read -r FILE; do
+    FILE_URL="$REMOTE_URL/$FILE"
+    FILE_PATH="$VERIFY_DIR/$FILE"
 
-for REQUIRED_FILE in "logo.png" "bundle.js.LICENSE.txt"; do
-    if ! grep -q "$REQUIRED_FILE" downloaded_files.txt; then
-        echo "❌ Missing: $REQUIRED_FILE"
-        MISSING_FILES=$((MISSING_FILES + 1))
-    fi
+    # Ensure target directory exists
+    mkdir -p "$(dirname "$FILE_PATH")"
+
+    # Download the file
+    echo "⬇️  Downloading $FILE..."
+    wget -q --no-clobber -O "$FILE_PATH" "$FILE_URL"
 done
 
-if [[ "$MISSING_FILES" -gt 0 ]]; then
-    echo "⚠️ Warning: Some expected files are missing. Consider checking the site structure."
-fi
-
 # Compute hash for verification
+echo "🔍 Computing hash..."
 COMPUTED_HASH=$(cd "$VERIFY_DIR" && find . -type f -print0 | sort -z | xargs -0 cat | sha256sum | awk '{ print $1 }')
 
 echo "✅ Expected Hash: $EXPECTED_HASH"
