@@ -1,3 +1,10 @@
+## [1.0.14](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.13...v1.0.14) (2025-03-05)
+
+
+### Bug Fixes
+
+* **wallet-connect:** error handling for wallet not connected ([8e931b3](https://github.com/Squads-Protocol/public-v4-client/commit/8e931b33d8e39628d8e633037aadb0140286279e))
+
 ## [1.0.13](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.12...v1.0.13) (2025-03-05)
 
 
