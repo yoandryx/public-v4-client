@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.4...v1.0.5) (2025-03-05)
+
+
+### Bug Fixes
+
+* **permissions:** human readable from bitmask ([b5deca6](https://github.com/Squads-Protocol/public-v4-client/commit/b5deca69dec3313f988207fc07d1e3d3f09525af))
+
 ## [1.0.4](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.3...v1.0.4) (2025-03-05)
 
 
