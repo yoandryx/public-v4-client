@@ -51,7 +51,7 @@ const ExecuteButton = ({
   const executeTransaction = async () => {
     if (!wallet.publicKey) {
       walletModal.setVisible(true);
-      return;
+      throw 'Wallet not connected';
     }
     const member = wallet.publicKey;
     if (!wallet.signAllTransactions) return;
@@ -80,19 +80,25 @@ const ExecuteButton = ({
     let txType;
     try {
       await multisig.accounts.VaultTransaction.fromAccountAddress(
-          // @ts-ignore
-          connection, transactionPda);
+        // @ts-ignore
+        connection,
+        transactionPda
+      );
       txType = 'vault';
     } catch (error) {
       try {
         await multisig.accounts.ConfigTransaction.fromAccountAddress(
-            // @ts-ignore
-            connection, transactionPda);
+          // @ts-ignore
+          connection,
+          transactionPda
+        );
         txType = 'config';
       } catch (e) {
         txData = await multisig.accounts.Batch.fromAccountAddress(
-            // @ts-ignore
-            connection, transactionPda);
+          // @ts-ignore
+          connection,
+          transactionPda
+        );
         txType = 'batch';
       }
     }
@@ -109,10 +115,10 @@ const ExecuteButton = ({
     let blockhash = (await connection.getLatestBlockhash()).blockhash;
 
     if (txType == 'vault') {
-        const resp = await multisig.instructions.vaultTransactionExecute({
+      const resp = await multisig.instructions.vaultTransactionExecute({
         multisigPda: new PublicKey(multisigPda),
-            // @ts-ignore
-            connection,
+        // @ts-ignore
+        connection,
         member,
         transactionIndex: bigIntTransactionIndex,
         programId: programId ? new PublicKey(programId) : multisig.PROGRAM_ID,
@@ -158,8 +164,8 @@ const ExecuteButton = ({
           range(executedBatchIndex + 1, batchSize).map(async (batchIndex) => {
             const { instruction: transactionExecuteIx, lookupTableAccounts } =
               await multisig.instructions.batchExecuteTransaction({
-                  // @ts-ignore
-                  connection,
+                // @ts-ignore
+                connection,
                 member,
                 batchIndex: bigIntTransactionIndex,
                 transactionIndex: batchIndex,
@@ -199,7 +205,7 @@ const ExecuteButton = ({
     <Dialog>
       <DialogTrigger
         disabled={!isTransactionReady}
-        className={`mr-2 h-10 px-4 py-2 ${!isTransactionReady ? `bg-primary/50` : `bg-primary hover:bg-primary/90 `} text-primary-foreground  rounded-md`}
+        className={`mr-2 h-10 px-4 py-2 ${!isTransactionReady ? `bg-primary/50` : `bg-primary hover:bg-primary/90`} rounded-md text-primary-foreground`}
       >
         Execute
       </DialogTrigger>

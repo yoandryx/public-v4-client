@@ -23,7 +23,7 @@ import { toast } from 'sonner';
 import { isPublickey } from '~/lib/isPublickey';
 import { useMultisigData } from '~/hooks/useMultisigData';
 import { useQueryClient } from '@tanstack/react-query';
-import {useAccess} from "../hooks/useAccess";
+import { useAccess } from '../hooks/useAccess';
 
 type SendSolProps = {
   multisigPda: string;
@@ -43,7 +43,7 @@ const SendSol = ({ multisigPda, vaultIndex }: SendSolProps) => {
 
   const transfer = async () => {
     if (!wallet.publicKey) {
-      return;
+      throw 'Wallet not connected';
     }
 
     const vaultAddress = multisig.getVaultPda({
@@ -59,8 +59,8 @@ const SendSol = ({ multisigPda, vaultIndex }: SendSolProps) => {
     });
 
     const multisigInfo = await multisig.accounts.Multisig.fromAccountAddress(
-        // @ts-ignore
-        connection,
+      // @ts-ignore
+      connection,
       new PublicKey(multisigPda)
     );
 
@@ -79,7 +79,7 @@ const SendSol = ({ multisigPda, vaultIndex }: SendSolProps) => {
       multisigPda: new PublicKey(multisigPda),
       creator: wallet.publicKey,
       ephemeralSigners: 0,
-        // @ts-ignore
+      // @ts-ignore
       transactionMessage: transferMessage,
       transactionIndex: transactionIndexBN,
       addressLookupTableAccounts: [],
@@ -126,7 +126,7 @@ const SendSol = ({ multisigPda, vaultIndex }: SendSolProps) => {
     <Dialog>
       <DialogTrigger asChild>
         <Button
-            disabled={!isMember}
+          disabled={!isMember}
           onClick={(e) => {
             if (!wallet.publicKey) {
               e.preventDefault();

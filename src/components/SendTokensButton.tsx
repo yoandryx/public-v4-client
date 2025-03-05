@@ -29,7 +29,7 @@ import { toast } from 'sonner';
 import { isPublickey } from '~/lib/isPublickey';
 import { useMultisigData } from '~/hooks/useMultisigData';
 import { useQueryClient } from '@tanstack/react-query';
-import {useAccess} from "../hooks/useAccess";
+import { useAccess } from '../hooks/useAccess';
 
 type SendTokensProps = {
   tokenAccount: string;
@@ -62,7 +62,7 @@ const SendTokens = ({
 
   const transfer = async () => {
     if (!wallet.publicKey) {
-      return;
+      throw 'Wallet not connected';
     }
     const recipientATA = getAssociatedTokenAddressSync(
       new PublicKey(mint),
@@ -95,7 +95,7 @@ const SendTokens = ({
     );
 
     const multisigInfo = await multisig.accounts.Multisig.fromAccountAddress(
-        // @ts-ignore
+      // @ts-ignore
       connection,
       new PublicKey(multisigPda)
     );
@@ -115,7 +115,7 @@ const SendTokens = ({
       multisigPda: new PublicKey(multisigPda),
       creator: wallet.publicKey,
       ephemeralSigners: 0,
-        // @ts-ignore
+      // @ts-ignore
       transactionMessage: transferMessage,
       transactionIndex: transactionIndexBN,
       addressLookupTableAccounts: [],
