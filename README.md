@@ -10,7 +10,7 @@ This repository hosts the code for a simplified client application for the Squad
     - Verification can be done against:
         - **Remote URLs**: Downloaded files can be verified for consistency with the expected hash.
         - **IPFS CID**: Retrieve the build from IPFS and verify its authenticity.
-- **Self-hosting**: Run the application as a Docker container using an NGINX server for fully self-managed hosting.
+- **Self-hosting**: Run the application as a Docker container using an Nginx server for fully self-managed hosting.
 
 ---
 
@@ -73,7 +73,7 @@ To verify an IPFS-hosted build:
 - [Docker](https://www.docker.com/)
 
 #### Run the Docker Container
-You can deploy the web app via a self-hosted Docker container using NGINX:
+You can deploy the web app via a self-hosted Docker container using Nginx:
 1. Build the Docker image:
    ```bash
    docker build -t squads-public-v4-client .

@@ -39,7 +39,6 @@ RUN chmod -R u+rwX,go+rX /squads-public-build/dist && \
 
 # Copy the build output to a standard location
 RUN mkdir -p /output && cp -r /squads-public-build/* /output/
-RUN mkdir -p /var/build-metadata && cp /output/hash.txt /var/build-metadata/hash.txt
 
 # Use a lightweight web server for serving static files
 FROM nginx:alpine AS server
