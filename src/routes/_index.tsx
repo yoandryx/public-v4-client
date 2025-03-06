@@ -4,11 +4,9 @@ import { Suspense } from 'react';
 
 const Index = () => {
   return (
-    <ErrorBoundary>
-      <Suspense>
-        <RenderMultisigRoute />
-      </Suspense>
-    </ErrorBoundary>
+    <Suspense>
+      <RenderMultisigRoute />
+    </Suspense>
   );
 };
 
