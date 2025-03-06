@@ -1,6 +1,6 @@
 # Squads Public Client v4
 
-This repository hosts the code for a simplified client application for the Squads V4 Program. The app can be built, verified for integrity, and deployed as a static site using multiple hosting options, including self-hostable solutions like Docker with NGINX. Here’s how you can use it effectively.
+This repository hosts the code for a simplified client application for the Squads V4 Program. The app can be built, verified for integrity, and deployed as a static site using multiple hosting options, including self-hostable solutions like Docker with Nginx. Here’s how you can use it effectively.
 
 ---
 
