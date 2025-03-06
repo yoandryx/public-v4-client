@@ -1,3 +1,11 @@
+## [1.0.15](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.14...v1.0.15) (2025-03-06)
+
+
+### Bug Fixes
+
+* **favicon:** added squads favicon.ico ([cec7b27](https://github.com/Squads-Protocol/public-v4-client/commit/cec7b273545d9fb61f24331b271610be53794632))
+* **table:** removed <div> to resolve react warning ([60d4923](https://github.com/Squads-Protocol/public-v4-client/commit/60d4923ce4d6ee372873f3c6e6f9257640bca37a))
+
 ## [1.0.14](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.13...v1.0.14) (2025-03-05)
 
 
