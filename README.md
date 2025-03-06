@@ -42,6 +42,11 @@ The following steps will guide you to build, verify, and host the application.
    ```
    A `dist/` directory will be created containing the static files.
 
+
+4. Generate a hash of the build:
+   ```bash
+   ./scripts/generate-hash.sh
+   ```
 ---
 
 ### 2. **Verify the Build**
