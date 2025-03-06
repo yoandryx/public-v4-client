@@ -76,16 +76,20 @@ To verify an IPFS-hosted build:
 You can deploy the web app via a self-hosted Docker container using NGINX:
 1. Build the Docker image:
    ```bash
-   docker build -t squads-public-client:v4 .
+   docker build -t squads-public-v4-client .
    ```
 
 2. Run the container:
    ```bash
-   docker run -d -p 8080:80 --name squads-public-client squads-public-client:v4
+   docker run -d -p 8080:80 squads-public-v4-client
    ```
 
 The app will now be available at `http://localhost:8080`.
 
+3. Retrieve the hash from the running container:
+    ```bash
+    docker exec <container_id> cat /var/build-metadata/hash.txt
+    ```
 ---
 
 ### 4. **Build Hash**

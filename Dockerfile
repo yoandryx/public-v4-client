@@ -39,12 +39,14 @@ RUN chmod -R u+rwX,go+rX /squads-public-build/dist && \
 
 # Copy the build output to a standard location
 RUN mkdir -p /output && cp -r /squads-public-build/* /output/
+RUN mkdir -p /var/build-metadata && cp /output/hash.txt /var/build-metadata/hash.txt
 
 # Use a lightweight web server for serving static files
 FROM nginx:alpine AS server
 
 # Copy built files and hash into the nginx root directory
 COPY --from=builder /output/dist /usr/share/nginx/html
+COPY --from=builder /output/hash.txt /var/build-metadata/hash.txt
 
 # Ensure Nginx serves the correct index.html
 RUN rm /etc/nginx/conf.d/default.conf
