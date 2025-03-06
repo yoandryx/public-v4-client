@@ -1,16 +1,16 @@
 #!/bin/bash
 
-EXPECTED_HASH=$(cat squads-public-build/hash.txt)
-
-if [ -z "$1" ]; then
-    echo "❌ Error: No IPFS CID provided."
-    echo "Usage: $0 <IPFS_CID>"
+# Check if CID and expected hash are provided
+if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "❌ Error: Missing arguments."
+    echo "Usage: $0 <IPFS_CID> <EXPECTED_HASH>"
     exit 1
 fi
 
 IPFS_CID="$1"
+EXPECTED_HASH="$2"
 
-# temp directory for verification
+# Temporary directory for verification
 VERIFY_DIR="squads-public-verify"
 rm -rf "$VERIFY_DIR"
 mkdir -p "$VERIFY_DIR"
@@ -24,6 +24,7 @@ if [ ! -d "$VERIFY_DIR/dist" ]; then
 fi
 
 # Compute hash for verification
+echo "🔍 Computing hash..."
 COMPUTED_HASH=$(cd "$VERIFY_DIR/dist" && find . -type f -print0 | sort -z | xargs -0 cat | sha256sum | awk '{ print $1 }')
 
 echo "✅ Expected Hash: $EXPECTED_HASH"

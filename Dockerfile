@@ -40,5 +40,28 @@ RUN chmod -R u+rwX,go+rX /squads-public-build/dist && \
 # Copy the build output to a standard location
 RUN mkdir -p /output && cp -r /squads-public-build/* /output/
 
-# Default command to print the build hash
-CMD ["sh", "-c", "cat /output/hash.txt"]
+# Use a lightweight web server for serving static files
+FROM nginx:alpine AS server
+
+# Copy built files and hash into the nginx root directory
+COPY --from=builder /output/dist /usr/share/nginx/html
+
+# Ensure Nginx serves the correct index.html
+RUN rm /etc/nginx/conf.d/default.conf
+COPY <<EOF /etc/nginx/conf.d/default.conf
+server {
+    listen 80;
+    server_name localhost;
+    root /usr/share/nginx/html;
+    index index.html;
+    location / {
+        try_files \$uri /index.html;
+    }
+}
+EOF
+
+# Expose port 80 for serving the static site
+EXPOSE 80
+
+# Default command to run nginx
+CMD ["nginx", "-g", "daemon off;"]
