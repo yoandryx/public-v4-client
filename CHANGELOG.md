@@ -1,3 +1,10 @@
+## [1.0.16](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.15...v1.0.16) (2025-03-06)
+
+
+### Bug Fixes
+
+* **lockfile:** updated lockfile ([c8e1b4a](https://github.com/Squads-Protocol/public-v4-client/commit/c8e1b4a3d209b7c1c3cfc4d9e7edb8e187e22833))
+
 ## [1.0.15](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.14...v1.0.15) (2025-03-06)
 
 
