@@ -49,7 +49,7 @@ export default function TransactionsPage() {
         <CreateTransaction />
       </div>
 
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense>
         <Table>
           <TableCaption>A list of your recent transactions.</TableCaption>
           <TableCaption>
@@ -64,7 +64,7 @@ export default function TransactionsPage() {
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense>
             <TransactionTable
               multisigPda={multisigAddress!}
               transactions={transactions}
