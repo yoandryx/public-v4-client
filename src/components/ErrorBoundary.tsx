@@ -1,5 +1,5 @@
-
 import { Component, ReactNode } from 'react';
+import { Button } from './ui/button';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -36,8 +36,9 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       ) : (
         <div className="error-boundary">
           <h2>Something went wrong.</h2>
-          <p>{this.state.error?.message || 'An unexpected error occurred.'}</p>
-          <button onClick={this.resetError}>Try Again</button>
+          <small>{this.state.error?.message || 'An unexpected error occurred.'}</small>
+          {this.state.error?.message.includes('jsonrpc') && <p>Try a different RPC</p>}
+          <Button onClick={this.resetError}>Try Again</Button>
         </div>
       );
     }
