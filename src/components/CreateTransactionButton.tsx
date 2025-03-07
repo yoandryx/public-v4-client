@@ -30,7 +30,7 @@ const CreateTransaction = () => {
   const getSampleMessage = async () => {
     invariant(programId, 'Program ID not found');
     invariant(multisigAddress, 'Multisig address not found. Please create a multisig first.');
-
+    invariant(wallet.publicKey, 'Wallet ID not found');
     let memo = 'Hello from Solana land!';
     const vaultAddress = multisig.getVaultPda({
       index: vaultIndex,
@@ -43,7 +43,7 @@ const CreateTransaction = () => {
         new TransactionInstruction({
           keys: [
             {
-              pubkey: wallet.publicKey as PublicKey,
+              pubkey: wallet.publicKey,
               isSigner: true,
               isWritable: true,
             },
@@ -63,7 +63,10 @@ const CreateTransaction = () => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="h-10 px-4 py-2 text-sm bg-primary text-primary-foreground hover:bg-primary/90 rounded-md">
+      <DialogTrigger
+        className={`h-10 rounded-md bg-primary px-4 py-2 text-sm text-primary-foreground ${!wallet || !wallet.publicKey ? `bg-primary/50 hover:bg-primary/50` : `hover:bg-primary/90`}`}
+        disabled={!wallet || !wallet.publicKey}
+      >
         Import Transaction
       </DialogTrigger>
       <DialogContent>
@@ -79,7 +82,7 @@ const CreateTransaction = () => {
           defaultValue={tx}
           onChange={(e) => setTx(e.target.value)}
         />
-        <div className="flex gap-2 items-center justify-end">
+        <div className="flex items-center justify-end gap-2">
           <Button
             onClick={() => {
               toast('Note: Simulations may fail on alt-SVM', {
@@ -127,7 +130,8 @@ const CreateTransaction = () => {
         </div>
         <button
           onClick={() => getSampleMessage()}
-          className="flex justify-end text-xs underline text-stone-400 hover:text-stone-200 cursor-pointer"
+          disabled={!wallet || !wallet.publicKey}
+          className="flex cursor-pointer justify-end text-xs text-stone-400 underline hover:text-stone-200"
         >
           Click to use a sample memo for testing
         </button>

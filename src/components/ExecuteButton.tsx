@@ -195,7 +195,8 @@ const ExecuteButton = ({
       toast.loading('Confirming...', {
         id: 'transaction',
       });
-      await connection.getSignatureStatuses([signature]);
+      const status = await connection.getSignatureStatuses([signature]);
+      console.log('Transaction status', status);
       await new Promise((resolve) => setTimeout(resolve, 5000));
     }
 
