@@ -17,8 +17,8 @@ const MultisigInput = ({ onUpdate }: { onUpdate: () => void }) => {
   };
 
   return (
-    <div className="mx-auto min-h-screen w-full max-w-4xl space-y-4 px-4 py-6 sm:px-6 md:py-10 lg:px-8">
-      <h1>Enter Multisig Address</h1>
+    <div className="mx-auto w-full max-w-4xl space-y-4 px-4 py-6 sm:px-6 md:py-10 lg:px-8">
+      <h1>Enter Multisig Config Address</h1>
       <p className="text-sm text-gray-500">
         There is no multisig set in Local Storage. Set it by entering its Public Key below.
       </p>
