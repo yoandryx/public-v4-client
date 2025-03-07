@@ -37,7 +37,7 @@ const MultisigLookup: React.FC<MultisigLookupProps> = ({ onUpdate }) => {
     const vaultPubkey = new PublicKey(vaultAddress);
     const signatures: ConfirmedSignatureInfo[] = await connection.getSignaturesForAddress(
       vaultPubkey,
-      { limit: 100 }
+      { limit: 300 }
     );
     if (signatures.length > 0) {
       setStatusMessages([`Found ${signatures.length} signatures`]);
