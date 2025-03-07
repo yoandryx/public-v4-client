@@ -25,13 +25,13 @@ const SetProgramIdInput = () => {
   return (
     <div>
       <Input
-        onChange={(e) => setProgramIdState(e.target.value)}
+        onChange={(e) => setProgramIdState(e.target.value.trim())}
         placeholder={storedProgramId || 'SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf'}
         value={programId} // Sync input state with stored value
         className=""
       />
       {!publicKeyTest && programId.length > 0 && (
-        <p className="text-xs mt-2 text-red-500">Please enter a valid key.</p>
+        <p className="mt-2 text-xs text-red-500">Please enter a valid key.</p>
       )}
       <Button
         onClick={() =>

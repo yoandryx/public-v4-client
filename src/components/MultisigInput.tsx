@@ -17,25 +17,17 @@ const MultisigInput = ({ onUpdate }: { onUpdate: () => void }) => {
   };
 
   return (
-    <div
-      className="
-        w-full max-w-4xl mx-auto
-        px-4 sm:px-6 lg:px-8
-        py-6 md:py-10
-        space-y-4
-        min-h-screen
-      "
-    >
+    <div className="mx-auto min-h-screen w-full max-w-4xl space-y-4 px-4 py-6 sm:px-6 md:py-10 lg:px-8">
       <h1>Enter Multisig Address</h1>
-      <p className="text-gray-500 text-sm">
+      <p className="text-sm text-gray-500">
         There is no multisig set in Local Storage. Set it by entering its Public Key below.
       </p>
       <Input
         type="text"
         placeholder="Multisig Address"
-        className="w-full border border-gray-300 rounded-md shadow-sm px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 sm:text-sm mt-2"
+        className="mt-2 w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-200 sm:text-sm"
         value={multisig}
-        onChange={(e) => setMultisig(e.target.value)}
+        onChange={(e) => setMultisig(e.target.value.trim())}
       />
       <Button onClick={onSubmit} className="mt-4">
         Set Multisig

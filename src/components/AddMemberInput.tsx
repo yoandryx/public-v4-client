@@ -94,7 +94,7 @@ const AddMemberInput = ({ multisigPda, transactionIndex, programId }: AddMemberI
     <div>
       <Input
         placeholder="Member Public Key"
-        onChange={(e) => setMember(e.target.value)}
+        onChange={(e) => setMember(e.target.value.trim())}
         className="mb-3"
       />
       <Button

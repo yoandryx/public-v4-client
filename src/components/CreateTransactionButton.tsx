@@ -80,7 +80,7 @@ const CreateTransaction = () => {
           placeholder="Paste base58 encoded transaction..."
           type="text"
           defaultValue={tx}
-          onChange={(e) => setTx(e.target.value)}
+          onChange={(e) => setTx(e.target.value.trim())}
         />
         <div className="flex items-center justify-end gap-2">
           <Button
