@@ -43,7 +43,7 @@ const SetExplorerInput = () => {
   return (
     <div>
       <Input
-        onChange={(e) => setExplorerUrlState(e.target.value)}
+        onChange={(e) => setExplorerUrlState(e.target.value.trim())}
         placeholder={storedExplorerUrl || 'Enter explorer URL'}
         value={explorerUrl}
         className=""

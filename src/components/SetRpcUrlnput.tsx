@@ -35,13 +35,13 @@ const SetRpcUrlInput = () => {
   return (
     <div>
       <Input
-        onChange={(e) => setRpcUrlState(e.target.value)}
+        onChange={(e) => setRpcUrlState(e.target.value.trim())}
         placeholder={storedRpcUrl || 'https://api.mainnet-beta.solana.com'}
         value={rpcUrl} // Sync input state with stored value
         className=""
       />
       {!isValidUrl(rpcUrl) && rpcUrl.length > 0 && (
-        <p className="text-xs mt-2">Please enter a valid URL.</p>
+        <p className="mt-2 text-xs">Please enter a valid URL.</p>
       )}
       <Button
         onClick={() =>
