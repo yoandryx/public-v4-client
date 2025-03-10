@@ -1,4 +1,4 @@
-name: Enforce Semantic Versioning
+name: PR Version Bump
 
 on:
   pull_request:
@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Ensure full history for semantic-release
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -29,9 +29,9 @@ jobs:
         run: |
           VERSION=$(npx semantic-release --dry-run | grep -oP '(?<=Published release: ).*' || echo "none")
           echo "NEXT_VERSION=$VERSION" >> $GITHUB_ENV
-        continue-on-error: true  # Avoid failure if no version bump is needed
+        continue-on-error: true
 
-      - name: Update Package Version in PR
+      - name: Apply Version Bump to PR
         if: env.NEXT_VERSION != 'none'
         run: |
           echo "Bumping version to $NEXT_VERSION"
