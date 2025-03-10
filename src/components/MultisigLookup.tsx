@@ -14,6 +14,7 @@ import {
 } from '@solana/web3.js';
 import { identifyInstructionByDiscriminator } from '../lib/discriminators';
 import { useMultisigAddress } from '../hooks/useMultisigAddress';
+import { toast } from 'sonner';
 
 interface MultisigLookupProps {
   onUpdate: () => void;
@@ -30,69 +31,74 @@ const MultisigLookup: React.FC<MultisigLookupProps> = ({ onUpdate }) => {
 
   const search = async (): Promise<void> => {
     if (!vaultAddress) return;
-
     setSearching(true);
     setStatusMessages([]);
+    try {
+      const vaultPubkey = new PublicKey(vaultAddress);
 
-    const vaultPubkey = new PublicKey(vaultAddress);
-    const signatures: ConfirmedSignatureInfo[] = await connection.getSignaturesForAddress(
-      vaultPubkey,
-      { limit: 300 }
-    );
-    if (signatures.length > 0) {
-      setStatusMessages([`Found ${signatures.length} signatures`]);
-    } else {
-      setStatusMessages([`There was an issue retrieving the signatures, search again`]);
-    }
-
-    for (const signature of signatures) {
-      setStatusMessages((prev) => [
-        ...prev,
-        `Scanning signature ${signature.signature} - in progress`,
-      ]);
-
-      const tx: VersionedTransactionResponse | null = await connection.getTransaction(
-        signature.signature,
-        {
-          commitment: 'confirmed',
-          maxSupportedTransactionVersion: 0,
-        }
+      const signatures: ConfirmedSignatureInfo[] = await connection.getSignaturesForAddress(
+        vaultPubkey,
+        { limit: 300 }
       );
+      if (signatures.length > 0) {
+        setStatusMessages([`Found ${signatures.length} signatures`]);
+      } else {
+        setStatusMessages([`There was an issue retrieving the signatures, search again`]);
+      }
 
-      if (tx) {
-        const result = await processTransaction(tx, connection, programId);
-        if (result) {
-          if (result.decompiled) {
-            for (let i = 0; i < result.decompiled.instructions.length; i++) {
-              let identified = identifyInstructionByDiscriminator(
-                result.decompiled.instructions[i],
-                programId
-              );
-              if (identified) {
-                let msKey =
-                  result.decompiled.instructions[i].keys[
-                    identified.multisigAccountIndex
-                  ].pubkey.toBase58();
-                setFoundMultisigs((prevState) => {
-                  return prevState.add(msKey);
-                });
+      for (const signature of signatures) {
+        setStatusMessages((prev) => [
+          ...prev,
+          `Scanning signature ${signature.signature} - in progress`,
+        ]);
+
+        const tx: VersionedTransactionResponse | null = await connection.getTransaction(
+          signature.signature,
+          {
+            commitment: 'confirmed',
+            maxSupportedTransactionVersion: 0,
+          }
+        );
+
+        if (tx) {
+          const result = await processTransaction(tx, connection, programId);
+          if (result) {
+            if (result.decompiled) {
+              for (let i = 0; i < result.decompiled.instructions.length; i++) {
+                let identified = identifyInstructionByDiscriminator(
+                  result.decompiled.instructions[i],
+                  programId
+                );
+                if (identified) {
+                  let msKey =
+                    result.decompiled.instructions[i].keys[
+                      identified.multisigAccountIndex
+                    ].pubkey.toBase58();
+                  setFoundMultisigs((prevState) => {
+                    return prevState.add(msKey);
+                  });
+                }
               }
             }
           }
         }
+
+        setStatusMessages((prev) =>
+          prev.map((msg) =>
+            msg.includes(signature.signature)
+              ? `Scanning signature ${signature.signature} - done`
+              : msg
+          )
+        );
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
 
-      setStatusMessages((prev) =>
-        prev.map((msg) =>
-          msg.includes(signature.signature)
-            ? `Scanning signature ${signature.signature} - done`
-            : msg
-        )
-      );
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setSearching(false);
+    } catch (e) {
+      console.error(e);
+      setSearching(false);
+      throw e;
     }
-
-    setSearching(false);
   };
 
   return (
@@ -110,7 +116,18 @@ const MultisigLookup: React.FC<MultisigLookupProps> = ({ onUpdate }) => {
         value={vaultAddress}
         onChange={(e) => setVaultAddress(e.target.value.trim())}
       />
-      <Button onClick={search} className="mt-4" disabled={searching}>
+      <Button
+        onClick={() =>
+          toast.promise(search, {
+            id: 'mksKeySearch',
+            loading: 'Loading...',
+            success: 'Search finished.',
+            error: (e) => `Failed to propose: ${e}`,
+          })
+        }
+        className="mt-4"
+        disabled={searching}
+      >
         {searching ? 'Searching...' : 'Search'}
       </Button>
 
