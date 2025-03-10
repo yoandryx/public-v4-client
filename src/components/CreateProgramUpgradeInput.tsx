@@ -1,4 +1,3 @@
-'use client';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { useWallet } from '@solana/wallet-adapter-react';
@@ -18,23 +17,16 @@ import {
 import { toast } from 'sonner';
 import { isPublickey } from '@/lib/isPublickey';
 import { SimplifiedProgramInfo } from '../hooks/useProgram';
+import { useMultisigData } from '../hooks/useMultisigData';
 
 type CreateProgramUpgradeInputProps = {
   programInfos: SimplifiedProgramInfo;
-  multisigPda: string;
   transactionIndex: number;
-  rpcUrl: string;
-  vaultIndex: number;
-  programId: string;
 };
 
 const CreateProgramUpgradeInput = ({
   programInfos,
-  multisigPda,
   transactionIndex,
-  rpcUrl,
-  vaultIndex,
-  programId,
 }: CreateProgramUpgradeInputProps) => {
   const wallet = useWallet();
   const walletModal = useWalletModal();
@@ -42,21 +34,23 @@ const CreateProgramUpgradeInput = ({
   const [bufferAddress, setBufferAddress] = useState('');
   const [spillAddress, setSpillAddress] = useState('');
 
-  const bigIntTransactionIndex = BigInt(transactionIndex);
-  const connection = new Connection(rpcUrl, { commitment: 'confirmed' });
+  const { connection, multisigAddress, vaultIndex, programId, multisigVault } = useMultisigData();
 
-  const vaultAddress = multisig.getVaultPda({
-    index: vaultIndex,
-    multisigPda: new PublicKey(multisigPda),
-    programId: programId ? new PublicKey(programId) : multisig.PROGRAM_ID,
-  })[0];
+  const bigIntTransactionIndex = BigInt(transactionIndex);
 
   const changeUpgradeAuth = async () => {
     if (!wallet.publicKey) {
       walletModal.setVisible(true);
-      return;
+      throw 'Wallet not connected';
     }
-
+    if (!multisigVault) {
+      throw 'Multisig vault not found';
+    }
+    if (!multisigAddress) {
+      throw 'Multisig not found';
+    }
+    const vaultAddress = new PublicKey(multisigVault);
+    const multisigPda = new PublicKey(multisigAddress);
     const upgradeData = Buffer.alloc(4);
     upgradeData.writeInt32LE(3, 0);
 
@@ -115,7 +109,7 @@ const CreateProgramUpgradeInput = ({
     const transactionIndexBN = BigInt(transactionIndex);
 
     const multisigTransactionIx = multisig.instructions.vaultTransactionCreate({
-      multisigPda: new PublicKey(multisigPda),
+      multisigPda,
       creator: wallet.publicKey,
       ephemeralSigners: 0,
       // @ts-ignore
@@ -127,7 +121,7 @@ const CreateProgramUpgradeInput = ({
       programId: programId ? new PublicKey(programId) : multisig.PROGRAM_ID,
     });
     const proposalIx = multisig.instructions.proposalCreate({
-      multisigPda: new PublicKey(multisigPda),
+      multisigPda,
       creator: wallet.publicKey,
       isDraft: false,
       transactionIndex: bigIntTransactionIndex,
@@ -135,7 +129,7 @@ const CreateProgramUpgradeInput = ({
       programId: programId ? new PublicKey(programId) : multisig.PROGRAM_ID,
     });
     const approveIx = multisig.instructions.proposalApprove({
-      multisigPda: new PublicKey(multisigPda),
+      multisigPda,
       member: wallet.publicKey,
       transactionIndex: bigIntTransactionIndex,
       programId: programId ? new PublicKey(programId) : multisig.PROGRAM_ID,
@@ -183,7 +177,7 @@ const CreateProgramUpgradeInput = ({
           })
         }
         disabled={
-          !isPublickey(programId) ||
+          !programId ||
           !isPublickey(bufferAddress) ||
           !isPublickey(spillAddress) ||
           !isPublickey(programInfos.programAddress) ||
