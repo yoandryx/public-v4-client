@@ -15,7 +15,7 @@ module.exports = {
       {
         assets: ['package.json', 'CHANGELOG.md'],
         message: 'chore(release): bump version to ${nextRelease.version} [skip ci]',
-        gpgsign: true,
+        push: false,
       },
     ],
     '@semantic-release/github',

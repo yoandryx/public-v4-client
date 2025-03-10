@@ -25,3 +25,23 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release
+
+      - name: Create Release Branch
+        run: |
+          BRANCH_NAME="release-$(date +%Y%m%d%H%M%S)"
+          git checkout -b "$BRANCH_NAME"
+          git add -A
+          git commit -m "chore(release): bump version [skip ci]" -S
+          git push origin "$BRANCH_NAME"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Pull Request
+        run: |
+          gh pr create \
+             --base main \
+             --head "$BRANCH_NAME" \
+             --title "chore(release): bump version" \
+             --body "Automated release via Semantic Release"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
