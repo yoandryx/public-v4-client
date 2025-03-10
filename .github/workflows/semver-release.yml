@@ -1,4 +1,4 @@
-name: Release
+name: Release on PR Merge
 
 on:
   push:
@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Run Semantic Release (Tag & Release Only)
+      - name: Run Semantic Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release --no-ci
+        run: npx semantic-release
