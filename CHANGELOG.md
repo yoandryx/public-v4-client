@@ -5,6 +5,30 @@
 
 * **lockfile:** updated lockfile ([c8e1b4a](https://github.com/Squads-Protocol/public-v4-client/commit/c8e1b4a3d209b7c1c3cfc4d9e7edb8e187e22833))
 
+## [1.1.0](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.16...v1.1.0) (2025-03-10)
+
+
+### Features
+
+* **confimation:** insure that signature is processed ([83c5f9f](https://github.com/Squads-Protocol/public-v4-client/commit/83c5f9f2c7ba71fe64904043d2dff5038795f227))
+* **ms-config-lookup:** set to 300 for sig limit ([7295b1f](https://github.com/Squads-Protocol/public-v4-client/commit/7295b1fcc3cb77c3046f96d92ad72ddbe83cf974))
+* **ms-config-lookup:** set to 300 for sig limit ([f0d2580](https://github.com/Squads-Protocol/public-v4-client/commit/f0d2580a24f33d849a0087b3bdafb331ce6da158))
+* **scan-for-ms:** scan through vault sigs to find ms ([b2b64ee](https://github.com/Squads-Protocol/public-v4-client/commit/b2b64eec3ae50a6b49d4b79be06380feccd76920))
+* **scan-for-ms:** scan through vault sigs to find ms ([7375783](https://github.com/Squads-Protocol/public-v4-client/commit/7375783a0e0fc46f95a59c4366b7b14e59e37f2f))
+* **web:** Add Program Manager Page ([9df4dab](https://github.com/Squads-Protocol/public-v4-client/commit/9df4dabb5128a8cf46e480f8e77e3bd26c7f69b7))
+
+
+### Bug Fixes
+
+* **confirm:** added wait for confirmation logic in utils ([38380ff](https://github.com/Squads-Protocol/public-v4-client/commit/38380ff8472faa72bc6853141db3f2148343561d))
+* **error-boundary:** add at page level to capture and preserve nav ([7a35c63](https://github.com/Squads-Protocol/public-v4-client/commit/7a35c63e4e9a63a29420f90455218a95d1f086f0))
+* **error-boundary:** include message regarding rpc ([25084e7](https://github.com/Squads-Protocol/public-v4-client/commit/25084e7aa4e63573fde0bc2df3b3ef403b862501))
+* **import-tx:** check wallet status ([2a440cd](https://github.com/Squads-Protocol/public-v4-client/commit/2a440cd84c32cc4129394f75e9865124057ea6da))
+* **inputs:** added trim to the input fields ([2ef9986](https://github.com/Squads-Protocol/public-v4-client/commit/2ef998612615fde26bc739be8b46a9926cabe1d1))
+* **modals:** better modal handling ([8a344a7](https://github.com/Squads-Protocol/public-v4-client/commit/8a344a704e6dac0f44826bc42b7d82aedbcc6c0e))
+* **ms-search:** error handling and toast ([0132422](https://github.com/Squads-Protocol/public-v4-client/commit/01324227c0d2438488e5467fc2a85a7e65c2c576))
+* **ms-search:** error handling and toast ([300655d](https://github.com/Squads-Protocol/public-v4-client/commit/300655dda6a90e38f2120888102d2c0889fbabfb))
+
 ## [1.0.15](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.14...v1.0.15) (2025-03-06)
 
 
