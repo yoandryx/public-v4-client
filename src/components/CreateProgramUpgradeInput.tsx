@@ -1,4 +1,3 @@
-'use client';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { useWallet } from '@solana/wallet-adapter-react';
@@ -8,6 +7,8 @@ import * as multisig from '@sqds/multisig';
 import {
   AccountMeta,
   PublicKey,
+  SYSVAR_CLOCK_PUBKEY,
+  SYSVAR_RENT_PUBKEY,
   TransactionInstruction,
   TransactionMessage,
   VersionedTransaction,
@@ -16,27 +17,32 @@ import { toast } from 'sonner';
 import { isPublickey } from '@/lib/isPublickey';
 import { SimplifiedProgramInfo } from '../hooks/useProgram';
 import { useMultisigData } from '../hooks/useMultisigData';
+import { useQueryClient } from '@tanstack/react-query';
 
-type ChangeUpgradeAuthorityInputProps = {
+type CreateProgramUpgradeInputProps = {
   programInfos: SimplifiedProgramInfo;
   transactionIndex: number;
 };
 
-const ChangeUpgradeAuthorityInput = ({
+const CreateProgramUpgradeInput = ({
   programInfos,
   transactionIndex,
-}: ChangeUpgradeAuthorityInputProps) => {
-  const [newAuthority, setNewAuthority] = useState('');
+}: CreateProgramUpgradeInputProps) => {
+  const queryClient = useQueryClient();
   const wallet = useWallet();
   const walletModal = useWalletModal();
 
-  const bigIntTransactionIndex = BigInt(transactionIndex);
+  const [bufferAddress, setBufferAddress] = useState('');
+  const [spillAddress, setSpillAddress] = useState('');
+
   const { connection, multisigAddress, vaultIndex, programId, multisigVault } = useMultisigData();
+
+  const bigIntTransactionIndex = BigInt(transactionIndex);
 
   const changeUpgradeAuth = async () => {
     if (!wallet.publicKey) {
       walletModal.setVisible(true);
-      return;
+      throw 'Wallet not connected';
     }
     if (!multisigVault) {
       throw 'Multisig vault not found';
@@ -44,12 +50,10 @@ const ChangeUpgradeAuthorityInput = ({
     if (!multisigAddress) {
       throw 'Multisig not found';
     }
-
-    const multisigPda = new PublicKey(multisigAddress);
     const vaultAddress = new PublicKey(multisigVault);
-
+    const multisigPda = new PublicKey(multisigAddress);
     const upgradeData = Buffer.alloc(4);
-    upgradeData.writeInt32LE(4, 0);
+    upgradeData.writeInt32LE(3, 0);
 
     const keys: AccountMeta[] = [
       {
@@ -58,14 +62,34 @@ const ChangeUpgradeAuthorityInput = ({
         isSigner: false,
       },
       {
+        pubkey: new PublicKey(programInfos.programAddress),
+        isWritable: true,
+        isSigner: false,
+      },
+      {
+        pubkey: new PublicKey(bufferAddress),
+        isWritable: true,
+        isSigner: false,
+      },
+      {
+        pubkey: new PublicKey(spillAddress),
+        isWritable: true,
+        isSigner: false,
+      },
+      {
+        pubkey: SYSVAR_RENT_PUBKEY,
+        isWritable: false,
+        isSigner: false,
+      },
+      {
+        pubkey: SYSVAR_CLOCK_PUBKEY,
+        isWritable: false,
+        isSigner: false,
+      },
+      {
         pubkey: vaultAddress,
         isWritable: false,
         isSigner: true,
-      },
-      {
-        pubkey: new PublicKey(newAuthority),
-        isWritable: false,
-        isSigner: false,
       },
     ];
 
@@ -86,7 +110,7 @@ const ChangeUpgradeAuthorityInput = ({
     const transactionIndexBN = BigInt(transactionIndex);
 
     const multisigTransactionIx = multisig.instructions.vaultTransactionCreate({
-      multisigPda: new PublicKey(multisigPda),
+      multisigPda,
       creator: wallet.publicKey,
       ephemeralSigners: 0,
       // @ts-ignore
@@ -95,21 +119,21 @@ const ChangeUpgradeAuthorityInput = ({
       addressLookupTableAccounts: [],
       rentPayer: wallet.publicKey,
       vaultIndex: vaultIndex,
-      programId: programId ? new PublicKey(programId) : multisig.PROGRAM_ID,
+      programId,
     });
     const proposalIx = multisig.instructions.proposalCreate({
-      multisigPda: new PublicKey(multisigPda),
+      multisigPda,
       creator: wallet.publicKey,
       isDraft: false,
       transactionIndex: bigIntTransactionIndex,
       rentPayer: wallet.publicKey,
-      programId: programId ? new PublicKey(programId) : multisig.PROGRAM_ID,
+      programId,
     });
     const approveIx = multisig.instructions.proposalApprove({
-      multisigPda: new PublicKey(multisigPda),
+      multisigPda,
       member: wallet.publicKey,
       transactionIndex: bigIntTransactionIndex,
-      programId: programId ? new PublicKey(programId) : multisig.PROGRAM_ID,
+      programId,
     });
 
     const message = new TransactionMessage({
@@ -129,13 +153,20 @@ const ChangeUpgradeAuthorityInput = ({
     });
     await connection.getSignatureStatuses([signature]);
     await new Promise((resolve) => setTimeout(resolve, 1000));
+    await queryClient.invalidateQueries({ queryKey: ['transactions'] });
   };
   return (
     <div>
       <Input
-        placeholder="New Program Authority"
+        placeholder="Buffer Address"
         type="text"
-        onChange={(e) => setNewAuthority(e.target.value)}
+        onChange={(e) => setBufferAddress(e.target.value)}
+        className="mb-3"
+      />
+      <Input
+        placeholder="Buffer Refund (Spill Address)"
+        type="text"
+        onChange={(e) => setSpillAddress(e.target.value)}
         className="mb-3"
       />
       <Button
@@ -149,15 +180,17 @@ const ChangeUpgradeAuthorityInput = ({
         }
         disabled={
           !programId ||
+          !isPublickey(bufferAddress) ||
+          !isPublickey(spillAddress) ||
           !isPublickey(programInfos.programAddress) ||
           !isPublickey(programInfos.authority) ||
           !isPublickey(programInfos.programDataAddress)
         }
       >
-        Change Authority
+        Create upgrade
       </Button>
     </div>
   );
 };
 
-export default ChangeUpgradeAuthorityInput;
+export default CreateProgramUpgradeInput;
