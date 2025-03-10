@@ -24,6 +24,7 @@ import { isPublickey } from '~/lib/isPublickey';
 import { useMultisigData } from '~/hooks/useMultisigData';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAccess } from '../hooks/useAccess';
+import { waitForConfirmation } from '../lib/transactionConfirmation';
 
 type SendSolProps = {
   multisigPda: string;
@@ -117,8 +118,12 @@ const SendSol = ({ multisigPda, vaultIndex }: SendSolProps) => {
     toast.loading('Confirming...', {
       id: 'transaction',
     });
-    await connection.getSignatureStatuses([signature]);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const sent = await waitForConfirmation(connection, [signature]);
+    if (!sent[0]) {
+      throw `Transaction failed or unable to confirm. Check ${signature}`;
+    }
+    setAmount('');
+    setRecipient('');
     await queryClient.invalidateQueries({ queryKey: ['transactions'] });
   };
 
