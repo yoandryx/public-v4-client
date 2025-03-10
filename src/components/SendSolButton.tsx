@@ -32,6 +32,8 @@ type SendSolProps = {
 };
 
 const SendSol = ({ multisigPda, vaultIndex }: SendSolProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const closeDialog = () => setIsOpen(false);
   const wallet = useWallet();
   const walletModal = useWalletModal();
   const [amount, setAmount] = useState<string>('');
@@ -124,11 +126,12 @@ const SendSol = ({ multisigPda, vaultIndex }: SendSolProps) => {
     }
     setAmount('');
     setRecipient('');
+    closeDialog();
     await queryClient.invalidateQueries({ queryKey: ['transactions'] });
   };
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
           disabled={!isMember}
@@ -137,6 +140,8 @@ const SendSol = ({ multisigPda, vaultIndex }: SendSolProps) => {
               e.preventDefault();
               walletModal.setVisible(true);
               return;
+            } else {
+              setIsOpen(true);
             }
           }}
         >

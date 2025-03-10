@@ -19,6 +19,7 @@ import { Input } from './ui/input';
 import { range } from '@/lib/utils';
 import { useMultisigData } from '@/hooks/useMultisigData';
 import { useQueryClient } from '@tanstack/react-query';
+import { waitForConfirmation } from '../lib/transactionConfirmation';
 
 type WithALT = {
   instruction: TransactionInstruction;
@@ -38,6 +39,8 @@ const ExecuteButton = ({
   proposalStatus,
   programId,
 }: ExecuteButtonProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const closeDialog = () => setIsOpen(false);
   const wallet = useWallet();
   const walletModal = useWalletModal();
   const [priorityFeeLamports, setPriorityFeeLamports] = useState<number>(5000);
@@ -187,26 +190,30 @@ const ExecuteButton = ({
 
     const signedTransactions = await wallet.signAllTransactions(transactions);
 
+    let signatures = [];
     for (const signedTx of signedTransactions) {
       const signature = await connection.sendRawTransaction(signedTx.serialize(), {
         skipPreflight: true,
       });
+      signatures.push(signature);
       console.log('Transaction signature', signature);
       toast.loading('Confirming...', {
         id: 'transaction',
       });
-      const status = await connection.getSignatureStatuses([signature]);
-      console.log('Transaction status', status);
-      await new Promise((resolve) => setTimeout(resolve, 5000));
     }
-
+    const sent = await waitForConfirmation(connection, signatures);
+    if (!sent.every((sent) => !!sent)) {
+      throw `Unable to confirm some transactions`;
+    }
+    closeDialog();
     await queryClient.invalidateQueries({ queryKey: ['transactions'] });
   };
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger
         disabled={!isTransactionReady}
         className={`mr-2 h-10 px-4 py-2 ${!isTransactionReady ? `bg-primary/50` : `bg-primary hover:bg-primary/90`} rounded-md text-primary-foreground`}
+        onClick={() => setIsOpen(true)}
       >
         Execute
       </DialogTrigger>
