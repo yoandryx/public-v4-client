@@ -1,6 +1,9 @@
 name: Enforce Semantic Versioning
 
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
@@ -12,6 +15,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Ensure full history for semantic-release
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -21,27 +26,33 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Run Semantic Release
+      - name: Determine Next Version (Dry Run)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(npx semantic-release --dry-run | grep -oP '(?<=Published release: ).*' || echo "none")
+          echo "NEXT_VERSION=$VERSION" >> $GITHUB_ENV
+        continue-on-error: true  # Avoid failure if no version bump is needed
+
+      - name: Update Package Version (If Needed)
+        if: env.NEXT_VERSION != 'none'
+        run: |
+          echo "Bumping version to $NEXT_VERSION"
+          npm version $NEXT_VERSION --no-git-tag-version
+          git add package.json package-lock.json
+          git commit -m "chore(release): bump version to $NEXT_VERSION [skip ci]"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Version Bump to PR Branch
+        if: env.NEXT_VERSION != 'none'
+        run: |
+          git push origin HEAD:${{ github.head_ref }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Full Release on Merge (Only on `main`)
+        if: github.ref == 'refs/heads/main'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release
-
-      - name: Create Release Branch
-        run: |
-          BRANCH_NAME="release-$(date +%Y%m%d%H%M%S)"
-          git checkout -b "$BRANCH_NAME"
-          git add -A
-          git commit -m "chore(release): bump version [skip ci]" -S
-          git push origin "$BRANCH_NAME"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create Pull Request
-        run: |
-          gh pr create \
-             --base main \
-             --head "$BRANCH_NAME" \
-             --title "chore(release): bump version" \
-             --body "Automated release via Semantic Release"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
