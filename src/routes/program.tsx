@@ -111,13 +111,9 @@ const ProgramPage = () => {
                 <CardContent>
                   <ChangeUpgradeAuthorityInput
                     programInfos={programInfos}
-                    multisigPda={multisigAddress!}
-                    rpcUrl={rpcUrl || clusterApiUrl('mainnet-beta')}
                     transactionIndex={
                       Number(multisigConfig ? multisigConfig.transactionIndex : 0) + 1
                     }
-                    vaultIndex={vaultIndex}
-                    programId={programId ? programId.toBase58() : multisig.PROGRAM_ID.toBase58()}
                   />
                 </CardContent>
               </Card>

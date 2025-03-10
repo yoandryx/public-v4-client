@@ -7,7 +7,6 @@ import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import * as multisig from '@sqds/multisig';
 import {
   AccountMeta,
-  Connection,
   PublicKey,
   TransactionInstruction,
   TransactionMessage,
@@ -16,42 +15,38 @@ import {
 import { toast } from 'sonner';
 import { isPublickey } from '@/lib/isPublickey';
 import { SimplifiedProgramInfo } from '../hooks/useProgram';
+import { useMultisigData } from '../hooks/useMultisigData';
 
 type ChangeUpgradeAuthorityInputProps = {
   programInfos: SimplifiedProgramInfo;
-  multisigPda: string;
   transactionIndex: number;
-  rpcUrl: string;
-  vaultIndex: number;
-  programId: string;
 };
 
 const ChangeUpgradeAuthorityInput = ({
   programInfos,
-  multisigPda,
   transactionIndex,
-  rpcUrl,
-  vaultIndex,
-  programId,
 }: ChangeUpgradeAuthorityInputProps) => {
   const [newAuthority, setNewAuthority] = useState('');
   const wallet = useWallet();
   const walletModal = useWalletModal();
 
   const bigIntTransactionIndex = BigInt(transactionIndex);
-  const connection = new Connection(rpcUrl, { commitment: 'confirmed' });
-
-  const vaultAddress = multisig.getVaultPda({
-    index: vaultIndex,
-    multisigPda: new PublicKey(multisigPda),
-    programId: programId ? new PublicKey(programId) : multisig.PROGRAM_ID,
-  })[0];
+  const { connection, multisigAddress, vaultIndex, programId, multisigVault } = useMultisigData();
 
   const changeUpgradeAuth = async () => {
     if (!wallet.publicKey) {
       walletModal.setVisible(true);
       return;
     }
+    if (!multisigVault) {
+      throw 'Multisig vault not found';
+    }
+    if (!multisigAddress) {
+      throw 'Multisig not found';
+    }
+
+    const multisigPda = new PublicKey(multisigAddress);
+    const vaultAddress = new PublicKey(multisigVault);
 
     const upgradeData = Buffer.alloc(4);
     upgradeData.writeInt32LE(4, 0);
@@ -152,7 +147,12 @@ const ChangeUpgradeAuthorityInput = ({
             error: (e) => `Failed to propose: ${e}`,
           })
         }
-        disabled={!isPublickey(programId) || !isPublickey(newAuthority)}
+        disabled={
+          !programId ||
+          !isPublickey(programInfos.programAddress) ||
+          !isPublickey(programInfos.authority) ||
+          !isPublickey(programInfos.programDataAddress)
+        }
       >
         Change Authority
       </Button>
