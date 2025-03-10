@@ -28,10 +28,12 @@ const MultisigLookup: React.FC<MultisigLookupProps> = ({ onUpdate }) => {
   const [searching, setSearching] = useState<boolean>(false);
   const [statusMessages, setStatusMessages] = useState<string[]>([]);
   const [foundMultisigs, setFoundMultisigs] = useState<Set<string>>(new Set());
+  const [forceCancel, setForceCancel] = useState<boolean>(false);
 
   const search = async (): Promise<void> => {
     if (!vaultAddress) return;
     setSearching(true);
+    setForceCancel(false);
     setStatusMessages([]);
     try {
       const vaultPubkey = new PublicKey(vaultAddress);
@@ -47,6 +49,9 @@ const MultisigLookup: React.FC<MultisigLookupProps> = ({ onUpdate }) => {
       }
 
       for (const signature of signatures) {
+        if (forceCancel) {
+          break;
+        }
         setStatusMessages((prev) => [
           ...prev,
           `Scanning signature ${signature.signature} - in progress`,
@@ -150,6 +155,7 @@ const MultisigLookup: React.FC<MultisigLookupProps> = ({ onUpdate }) => {
                 <li key={`ms-${index}`}>
                   <Button
                     onClick={async () => {
+                      setForceCancel(true);
                       await setMultisigAddress.mutateAsync(msKey); // Save using React Query
                     }}
                   >
