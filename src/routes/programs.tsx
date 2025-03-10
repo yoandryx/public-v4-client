@@ -11,8 +11,7 @@ import { useState } from 'react';
 import { useProgram } from '../hooks/useProgram';
 import CreateProgramUpgradeInput from '../components/CreateProgramUpgradeInput';
 
-const ProgramPage = () => {
-  const { rpcUrl, multisigAddress, vaultIndex, programId } = useMultisigData();
+const ProgramsPage = () => {
   const { data: multisigConfig } = useMultisig();
 
   // State for program ID input and validation
@@ -58,7 +57,10 @@ const ProgramPage = () => {
         <Card>
           <CardHeader>
             <CardTitle>Program</CardTitle>
-            <CardDescription>Add a programId to see its information</CardDescription>
+            <CardDescription>
+              Enter the Program ID for a program under Squad authority. Upon validation, you will
+              have the ability to upgrade and modify its authority settings.
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -141,4 +143,4 @@ const ProgramPage = () => {
   );
 };
 
-export default ProgramPage;
+export default ProgramsPage;

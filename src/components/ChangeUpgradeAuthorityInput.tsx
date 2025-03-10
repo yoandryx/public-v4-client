@@ -149,6 +149,7 @@ const ChangeUpgradeAuthorityInput = ({
         }
         disabled={
           !programId ||
+          !isPublickey(newAuthority) ||
           !isPublickey(programInfos.programAddress) ||
           !isPublickey(programInfos.authority) ||
           !isPublickey(programInfos.programDataAddress)

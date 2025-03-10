@@ -110,9 +110,8 @@ const MultisigLookup: React.FC<MultisigLookupProps> = ({ onUpdate }) => {
     <div className="mx-auto w-full max-w-4xl space-y-4 px-4 py-6 sm:px-6 md:py-10 lg:px-8">
       <h1>Search for Multisig Config Address</h1>
       <p className="text-sm text-gray-500">
-        The multisig config address is used to derive the vaults and relevant authority. This may
-        not be explicitly known. Don't know the multisig config address? Lookup your Squad by the
-        vault address that you use to send and receive funds.
+        If you can't access your settings in main Squads app UI to find the multisig config address,
+        enter your vault address below to do a search via onchain call.
       </p>
       <Input
         type="text"

@@ -9,7 +9,7 @@ export default function TabNav() {
     { name: 'Home', icon: <LucideHome />, route: '/' },
     { name: 'Transactions', icon: <ArrowDownUp />, route: '/transactions/' },
     { name: 'Configuration', icon: <Users />, route: '/config/' },
-    { name: 'Program', icon: <Box />, route: '/program/' },
+    { name: 'Programs', icon: <Box />, route: '/programs/' },
     { name: 'Settings', icon: <Settings />, route: '/settings/' },
   ];
 
