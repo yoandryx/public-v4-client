@@ -6,7 +6,6 @@ import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import * as multisig from '@sqds/multisig';
 import {
   AccountMeta,
-  Connection,
   PublicKey,
   SYSVAR_CLOCK_PUBKEY,
   SYSVAR_RENT_PUBKEY,
@@ -18,6 +17,7 @@ import { toast } from 'sonner';
 import { isPublickey } from '@/lib/isPublickey';
 import { SimplifiedProgramInfo } from '../hooks/useProgram';
 import { useMultisigData } from '../hooks/useMultisigData';
+import { useQueryClient } from '@tanstack/react-query';
 
 type CreateProgramUpgradeInputProps = {
   programInfos: SimplifiedProgramInfo;
@@ -28,6 +28,7 @@ const CreateProgramUpgradeInput = ({
   programInfos,
   transactionIndex,
 }: CreateProgramUpgradeInputProps) => {
+  const queryClient = useQueryClient();
   const wallet = useWallet();
   const walletModal = useWalletModal();
 
@@ -118,7 +119,7 @@ const CreateProgramUpgradeInput = ({
       addressLookupTableAccounts: [],
       rentPayer: wallet.publicKey,
       vaultIndex: vaultIndex,
-      programId: programId ? new PublicKey(programId) : multisig.PROGRAM_ID,
+      programId,
     });
     const proposalIx = multisig.instructions.proposalCreate({
       multisigPda,
@@ -126,13 +127,13 @@ const CreateProgramUpgradeInput = ({
       isDraft: false,
       transactionIndex: bigIntTransactionIndex,
       rentPayer: wallet.publicKey,
-      programId: programId ? new PublicKey(programId) : multisig.PROGRAM_ID,
+      programId,
     });
     const approveIx = multisig.instructions.proposalApprove({
       multisigPda,
       member: wallet.publicKey,
       transactionIndex: bigIntTransactionIndex,
-      programId: programId ? new PublicKey(programId) : multisig.PROGRAM_ID,
+      programId,
     });
 
     const message = new TransactionMessage({
@@ -152,6 +153,7 @@ const CreateProgramUpgradeInput = ({
     });
     await connection.getSignatureStatuses([signature]);
     await new Promise((resolve) => setTimeout(resolve, 1000));
+    await queryClient.invalidateQueries({ queryKey: ['transactions'] });
   };
   return (
     <div>
