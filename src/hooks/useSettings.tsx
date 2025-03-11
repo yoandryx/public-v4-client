@@ -36,7 +36,7 @@ const DEFAULT_PROGRAM_ID = multisig.PROGRAM_ID.toBase58();
 
 const getProgramId = () => {
   if (typeof window !== 'undefined') {
-    return localStorage.getItem('x-program-id') || DEFAULT_PROGRAM_ID;
+    return localStorage.getItem('x-program-id-v4') || DEFAULT_PROGRAM_ID;
   }
   return DEFAULT_PROGRAM_ID;
 };
@@ -51,7 +51,7 @@ export const useProgramId = () => {
 
   const setProgramId = useMutation({
     mutationFn: (newProgramId: string) => {
-      localStorage.setItem('x-program-id', newProgramId);
+      localStorage.setItem('x-program-id-v4', newProgramId);
       return Promise.resolve(newProgramId);
     },
     onSuccess: (newProgramId) => {
