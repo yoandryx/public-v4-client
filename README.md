@@ -118,6 +118,12 @@ A `manifest.json` file is included in the build, containing references to all st
 
 ---
 
+## Hash List
+Recent hashes may be found here:
+[Recent Hashes](HASHES.md)
+
+---
+
 ## Contributing
 
 Contributions are welcome! Please fork the repository, make your changes, and open a pull request.
