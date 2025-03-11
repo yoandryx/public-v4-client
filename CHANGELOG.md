@@ -5,6 +5,13 @@
 
 * **lockfile:** updated lockfile ([c8e1b4a](https://github.com/Squads-Protocol/public-v4-client/commit/c8e1b4a3d209b7c1c3cfc4d9e7edb8e187e22833))
 
+## [1.2.1](https://github.com/Squads-Protocol/public-v4-client/compare/v1.2.0...v1.2.1) (2025-03-11)
+
+
+### Bug Fixes
+
+* **nav-error:** updated rpc error flow and nav ([c31a697](https://github.com/Squads-Protocol/public-v4-client/commit/c31a6970a60a8db6410246dde7c61c85542b8378))
+
 ## [1.2.0](https://github.com/Squads-Protocol/public-v4-client/compare/v1.1.0...v1.2.0) (2025-03-11)
 
 
