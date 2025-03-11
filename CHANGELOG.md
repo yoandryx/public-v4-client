@@ -5,6 +5,13 @@
 
 * **lockfile:** updated lockfile ([c8e1b4a](https://github.com/Squads-Protocol/public-v4-client/commit/c8e1b4a3d209b7c1c3cfc4d9e7edb8e187e22833))
 
+## [1.2.0](https://github.com/Squads-Protocol/public-v4-client/compare/v1.1.0...v1.2.0) (2025-03-11)
+
+
+### Features
+
+* **tx-import:** added vault selector ([881420e](https://github.com/Squads-Protocol/public-v4-client/commit/881420e2e2f1e2a0c411ddfdbe7aa369bcde6b71))
+
 ## [1.1.0](https://github.com/Squads-Protocol/public-v4-client/compare/v1.0.16...v1.1.0) (2025-03-10)
 
 
