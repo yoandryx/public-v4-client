@@ -5,7 +5,7 @@ import { Suspense } from 'react';
 const Index = () => {
   return (
     <ErrorBoundary>
-      <Suspense>
+      <Suspense fallback={<div>Loading...</div>}>
         <RenderMultisigRoute />
       </Suspense>
     </ErrorBoundary>

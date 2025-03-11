@@ -45,54 +45,56 @@ export default function TransactionsPage() {
 
   return (
     <ErrorBoundary>
-      <div>
-        <div className="mb-4 flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Transactions</h1>
-          <CreateTransaction />
+      <Suspense fallback={<div>Loading ...</div>}>
+        <div>
+          <div className="mb-4 flex items-center justify-between">
+            <h1 className="text-3xl font-bold">Transactions</h1>
+            <CreateTransaction />
+          </div>
+
+          <Suspense>
+            <Table>
+              <TableCaption>A list of your recent transactions.</TableCaption>
+              <TableCaption>
+                Page: {page} of {totalPages}
+              </TableCaption>
+
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Index</TableHead>
+                  <TableHead>Transaction Address</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <Suspense>
+                <TransactionTable
+                  multisigPda={multisigAddress!}
+                  transactions={transactions}
+                  programId={programId!.toBase58()}
+                />
+              </Suspense>
+            </Table>
+          </Suspense>
+
+          <Pagination>
+            <PaginationContent>
+              {page > 1 && (
+                <PaginationPrevious
+                  onClick={() => navigate(`/transactions?page=${page - 1}`)}
+                  to={`/transactions?page=${page - 1}`}
+                />
+              )}
+              {page < totalPages && (
+                <PaginationNext
+                  to={`/transactions?page=${page + 1}`}
+                  onClick={() => navigate(`/transactions?page=${page + 1}`)}
+                />
+              )}
+            </PaginationContent>
+          </Pagination>
         </div>
-
-        <Suspense>
-          <Table>
-            <TableCaption>A list of your recent transactions.</TableCaption>
-            <TableCaption>
-              Page: {page} of {totalPages}
-            </TableCaption>
-
-            <TableHeader>
-              <TableRow>
-                <TableHead>Index</TableHead>
-                <TableHead>Transaction Address</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <Suspense>
-              <TransactionTable
-                multisigPda={multisigAddress!}
-                transactions={transactions}
-                programId={programId!.toBase58()}
-              />
-            </Suspense>
-          </Table>
-        </Suspense>
-
-        <Pagination>
-          <PaginationContent>
-            {page > 1 && (
-              <PaginationPrevious
-                onClick={() => navigate(`/transactions?page=${page - 1}`)}
-                to={`/transactions?page=${page - 1}`}
-              />
-            )}
-            {page < totalPages && (
-              <PaginationNext
-                to={`/transactions?page=${page + 1}`}
-                onClick={() => navigate(`/transactions?page=${page + 1}`)}
-              />
-            )}
-          </PaginationContent>
-        </Pagination>
-      </div>
+      </Suspense>
     </ErrorBoundary>
   );
 }

@@ -2,6 +2,8 @@ import { ArrowDownUp, LucideHome, Settings, Users, Box, Github } from 'lucide-re
 import ConnectWallet from '@/components/ConnectWalletButton';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { ChangeMultisigFromNav } from './ChangeMultisigFromNav';
+
 export default function TabNav() {
   const location = useLocation();
   const path = location.pathname;
@@ -61,7 +63,10 @@ export default function TabNav() {
               </li>
             </ul>
           </div>
-          <ConnectWallet />
+          <div>
+            <ChangeMultisigFromNav />
+            <ConnectWallet />
+          </div>
         </div>
       </aside>
 
@@ -70,12 +75,12 @@ export default function TabNav() {
         className="bg-slate-20 fixed inset-x-0 bottom-0 z-50 block bg-slate-300 p-2 md:hidden"
         aria-label="Mobile navbar"
       >
-        <div className="mx-auto mt-1 grid h-full max-w-lg grid-cols-4 font-medium">
+        <div className="mx-auto mt-1 grid h-full max-w-lg grid-cols-5 font-medium">
           {tabs.map((tab) => (
-            <Link to={tab.route} key={tab.route}>
+            <Link to={tab.route} key={tab.route} className={`flex justify-center`}>
               <button
                 type="button"
-                className="group inline-flex flex-col items-center justify-center rounded-md px-5 py-2 hover:bg-slate-400"
+                className="group inline-flex flex-col items-center justify-center rounded-md py-2 hover:bg-slate-400"
               >
                 {tab.icon}
                 <span className="flex-1 whitespace-nowrap text-sm text-slate-900">{tab.name}</span>
