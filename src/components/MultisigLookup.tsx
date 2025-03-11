@@ -50,6 +50,7 @@ const MultisigLookup: React.FC<MultisigLookupProps> = ({ onUpdate }) => {
 
       for (const signature of signatures) {
         if (forceCancel) {
+          setSearching(false);
           break;
         }
         setStatusMessages((prev) => [

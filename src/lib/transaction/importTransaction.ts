@@ -27,7 +27,7 @@ export const importTransaction = async (
     const { message, version } = decodeAndDeserialize(tx);
 
     const multisigInfo = await multisig.accounts.Multisig.fromAccountAddress(
-        // @ts-ignore
+      // @ts-ignore
       connection,
       new PublicKey(multisigPda)
     );
@@ -46,7 +46,7 @@ export const importTransaction = async (
       multisigPda: new PublicKey(multisigPda),
       creator: wallet.publicKey,
       ephemeralSigners: 0,
-        // @ts-ignore
+      // @ts-ignore
       transactionMessage: transactionMessage,
       transactionIndex: transactionIndexBN,
       addressLookupTableAccounts,
@@ -101,5 +101,6 @@ export const importTransaction = async (
     }
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };

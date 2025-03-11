@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 
-const MULTISIG_STORAGE_KEY = 'x-multisig';
+const MULTISIG_STORAGE_KEY = 'x-multisig-v4';
 
 const getMultisigAddress = () => {
   if (typeof window !== 'undefined') {

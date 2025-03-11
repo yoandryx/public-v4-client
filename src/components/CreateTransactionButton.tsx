@@ -18,6 +18,7 @@ import { simulateEncodedTransaction } from '@/lib/transaction/simulateEncodedTra
 import { importTransaction } from '@/lib/transaction/importTransaction';
 import { useMultisigData } from '@/hooks/useMultisigData';
 import invariant from 'invariant';
+import { VaultSelector } from './VaultSelector';
 
 const CreateTransaction = () => {
   const wallet = useWallet();
@@ -62,7 +63,7 @@ const CreateTransaction = () => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen} modal={false}>
       <DialogTrigger
         className={`h-10 rounded-md bg-primary px-4 py-2 text-sm text-primary-foreground ${!wallet || !wallet.publicKey ? `bg-primary/50 hover:bg-primary/50` : `hover:bg-primary/90`}`}
         disabled={!wallet || !wallet.publicKey}
@@ -76,6 +77,10 @@ const CreateTransaction = () => {
             Propose a transaction from a base58 encoded transaction message (not a transaction).
           </DialogDescription>
         </DialogHeader>
+        <div className={`flex items-center justify-between gap-2`}>
+          <p>Using Vault Index:</p>
+          <VaultSelector />
+        </div>
         <Input
           placeholder="Paste base58 encoded transaction..."
           type="text"

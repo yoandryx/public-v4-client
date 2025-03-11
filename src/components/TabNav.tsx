@@ -1,4 +1,4 @@
-import { ArrowDownUp, LucideHome, Settings, Users, Box } from 'lucide-react';
+import { ArrowDownUp, LucideHome, Settings, Users, Box, Github } from 'lucide-react';
 import ConnectWallet from '@/components/ConnectWalletButton';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
@@ -45,6 +45,20 @@ export default function TabNav() {
                   </Link>
                 </li>
               ))}
+              <li key={'github-link'}>
+                <Link
+                  key={`github-link`}
+                  to="https://github.com/Squads-Protocol/public-v4-client"
+                  target="_blank"
+                  rel="noreferrer"
+                  className={`flex items-center rounded-lg px-4 py-3 text-slate-900 hover:bg-slate-400`}
+                >
+                  <Github />
+                  <span className="ml-3 flex-1 whitespace-nowrap text-base text-black">
+                    GitHub Repo
+                  </span>
+                </Link>
+              </li>
             </ul>
           </div>
           <ConnectWallet />
