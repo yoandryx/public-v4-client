@@ -15,13 +15,7 @@ import {
 } from '@solana/spl-token';
 import * as multisig from '@sqds/multisig';
 import { useWallet } from '@solana/wallet-adapter-react';
-import {
-  Connection,
-  PublicKey,
-  TransactionMessage,
-  VersionedTransaction,
-  clusterApiUrl,
-} from '@solana/web3.js';
+import { PublicKey, TransactionMessage, VersionedTransaction } from '@solana/web3.js';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import { Input } from './ui/input';
 import { toast } from 'sonner';

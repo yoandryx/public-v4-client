@@ -12,6 +12,8 @@ import { useAccess } from '@/hooks/useAccess';
 import { useMultisigData } from '@/hooks/useMultisigData';
 import { isMember } from '../lib/utils';
 import invariant from 'invariant';
+import { waitForConfirmation } from '../lib/transactionConfirmation';
+import { useQueryClient } from '@tanstack/react-query';
 
 type AddMemberInputProps = {
   multisigPda: string;
@@ -26,7 +28,7 @@ const AddMemberInput = ({ multisigPda, transactionIndex, programId }: AddMemberI
   const { data: multisigConfig } = useMultisig();
   const bigIntTransactionIndex = BigInt(transactionIndex);
   const { connection } = useMultisigData();
-
+  const queryClient = useQueryClient();
   const hasAccess = useAccess();
   const addMember = async () => {
     invariant(multisigConfig, 'invalid multisig conf data');
@@ -87,8 +89,11 @@ const AddMemberInput = ({ multisigPda, transactionIndex, programId }: AddMemberI
     toast.loading('Confirming...', {
       id: 'transaction',
     });
-    await connection.getSignatureStatuses([signature]);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const sent = await waitForConfirmation(connection, [signature]);
+    if (!sent[0]) {
+      throw `Transaction failed or unable to confirm. Check ${signature}`;
+    }
+    await queryClient.invalidateQueries({ queryKey: ['transactions'] });
   };
   return (
     <div>
