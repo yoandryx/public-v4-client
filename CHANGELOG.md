@@ -5,6 +5,17 @@
 
 * **lockfile:** updated lockfile ([c8e1b4a](https://github.com/Squads-Protocol/public-v4-client/commit/c8e1b4a3d209b7c1c3cfc4d9e7edb8e187e22833))
 
+## [1.2.2](https://github.com/Squads-Protocol/public-v4-client/compare/v1.2.1...v1.2.2) (2025-03-12)
+
+
+### Bug Fixes
+
+* **confirmation:** better confirmation logic ([6a46192](https://github.com/Squads-Protocol/public-v4-client/commit/6a4619246bb3d6c78e8a3798416387748d438659))
+* **confirmations:** better handling in tx import ([884229b](https://github.com/Squads-Protocol/public-v4-client/commit/884229bf4018bd1a51e935676bc7e27eedeb9d6d))
+* **confirmations:** fixed false positives ([0aa98bc](https://github.com/Squads-Protocol/public-v4-client/commit/0aa98bc49e4d4d144dc955c7d0c501d21caafb8a))
+* **confirmations:** reject on missing confirmations ([c41bda5](https://github.com/Squads-Protocol/public-v4-client/commit/c41bda54a266561a05821b1826ad0ed02a157336))
+* **modal:** dismiss modal after success ([5c90919](https://github.com/Squads-Protocol/public-v4-client/commit/5c909195463419e01b581d3cd62016d28def31db))
+
 ## [1.2.1](https://github.com/Squads-Protocol/public-v4-client/compare/v1.2.0...v1.2.1) (2025-03-11)
 
 
