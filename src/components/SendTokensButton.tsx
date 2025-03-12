@@ -54,6 +54,9 @@ const SendTokens = ({
   const isAmountValid = !isNaN(parsedAmount) && parsedAmount > 0;
   const isMember = useAccess();
 
+  const [isOpen, setIsOpen] = useState(false);
+  const closeDialog = () => setIsOpen(false);
+
   const transfer = async () => {
     if (!wallet.publicKey) {
       throw 'Wallet not connected';
@@ -153,10 +156,11 @@ const SendTokens = ({
     setAmount('');
     setRecipient('');
     await queryClient.invalidateQueries({ queryKey: ['transactions'] });
+    closeDialog();
   };
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
           disabled={!isMember}
@@ -178,9 +182,17 @@ const SendTokens = ({
             Create a proposal to transfer tokens to another address.
           </DialogDescription>
         </DialogHeader>
-        <Input placeholder="Recipient" type="text" onChange={(e) => setRecipient(e.target.value)} />
+        <Input
+          placeholder="Recipient"
+          type="text"
+          onChange={(e) => setRecipient(e.target.value.trim())}
+        />
         {isPublickey(recipient) ? null : <p className="text-xs">Invalid recipient address</p>}
-        <Input placeholder="Amount" type="number" onChange={(e) => setAmount(e.target.value)} />
+        <Input
+          placeholder="Amount"
+          type="number"
+          onChange={(e) => setAmount(e.target.value.trim())}
+        />
         {!isAmountValid && amount.length > 0 && (
           <p className="text-xs text-red-500">Invalid amount</p>
         )}
@@ -193,7 +205,7 @@ const SendTokens = ({
               error: (e) => `Failed to propose: ${e}`,
             })
           }
-          disabled={!isPublickey(recipient)}
+          disabled={!isPublickey(recipient) || amount.length < 1 || !isAmountValid}
         >
           Transfer
         </Button>

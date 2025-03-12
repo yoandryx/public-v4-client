@@ -16,7 +16,7 @@ export const useMultisig = () => {
       try {
         const multisigPubkey = new PublicKey(multisigAddress);
         // @ts-ignore
-          return multisig.accounts.Multisig.fromAccountAddress(connection, multisigPubkey);
+        return multisig.accounts.Multisig.fromAccountAddress(connection, multisigPubkey);
       } catch (error) {
         console.error(error);
         return null;
@@ -82,7 +82,7 @@ async function fetchTransactionData(
   let proposal;
   try {
     // @ts-ignore
-      proposal = await multisig.accounts.Proposal.fromAccountAddress(connection, proposalPda[0]);
+    proposal = await multisig.accounts.Proposal.fromAccountAddress(connection, proposalPda[0]);
   } catch (error) {
     proposal = null;
   }
@@ -94,7 +94,10 @@ export const useTransactions = (startIndex: number, endIndex: number) => {
   const { connection, programId, multisigAddress } = useMultisigData();
 
   return useSuspenseQuery({
-    queryKey: ['transactions', startIndex, endIndex, multisigAddress, programId.toBase58()],
+    queryKey: [
+      'transactions',
+      { startIndex, endIndex, multisigAddress, programId: programId.toBase58() },
+    ],
     queryFn: async () => {
       if (!multisigAddress) return null;
       try {
