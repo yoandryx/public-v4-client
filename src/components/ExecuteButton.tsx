@@ -203,7 +203,7 @@ const ExecuteButton = ({
     }
     const sent = await waitForConfirmation(connection, signatures);
     if (!sent.every((sent) => !!sent)) {
-      throw `Unable to confirm some transactions`;
+      throw `Unable to confirm ${sent.length} transactions`;
     }
     closeDialog();
     await queryClient.invalidateQueries({ queryKey: ['transactions'] });

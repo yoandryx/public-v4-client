@@ -1,4 +1,3 @@
-'use client';
 import { Connection, PublicKey, TransactionMessage, VersionedTransaction } from '@solana/web3.js';
 import { Button } from './ui/button';
 import * as multisig from '@sqds/multisig';
@@ -6,9 +5,11 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import { toast } from 'sonner';
 import { useAccess } from '../hooks/useAccess';
+import { waitForConfirmation } from '../lib/transactionConfirmation';
+import { useQueryClient } from '@tanstack/react-query';
+import { useMultisigData } from '../hooks/useMultisigData';
 
 type RemoveMemberButtonProps = {
-  rpcUrl: string;
   multisigPda: string;
   transactionIndex: number;
   memberKey: string;
@@ -16,7 +17,6 @@ type RemoveMemberButtonProps = {
 };
 
 const RemoveMemberButton = ({
-  rpcUrl,
   multisigPda,
   transactionIndex,
   memberKey,
@@ -26,8 +26,8 @@ const RemoveMemberButton = ({
   const walletModal = useWalletModal();
   const isMember = useAccess();
   const member = new PublicKey(memberKey);
-
-  const connection = new Connection(rpcUrl, { commitment: 'confirmed' });
+  const queryClient = useQueryClient();
+  const { connection } = useMultisigData();
 
   const removeMember = async () => {
     if (!wallet.publicKey) {
@@ -79,8 +79,11 @@ const RemoveMemberButton = ({
     toast.loading('Confirming...', {
       id: 'transaction',
     });
-    await connection.getSignatureStatuses([signature]);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const sent = await waitForConfirmation(connection, [signature]);
+    if (!sent[0]) {
+      throw `Transaction failed or unable to confirm. Check ${signature}`;
+    }
+    await queryClient.invalidateQueries({ queryKey: ['transactions'] });
   };
   return (
     <Button

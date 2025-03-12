@@ -9,6 +9,8 @@ import { toast } from 'sonner';
 import { useMultisig } from '../hooks/useServices';
 import invariant from 'invariant';
 import { types as multisigTypes } from '@sqds/multisig';
+import { waitForConfirmation } from '../lib/transactionConfirmation';
+import { useQueryClient } from '@tanstack/react-query';
 
 type ChangeThresholdInputProps = {
   multisigPda: string;
@@ -27,6 +29,7 @@ const ChangeThresholdInput = ({
   const [threshold, setThreshold] = useState('');
   const wallet = useWallet();
   const walletModal = useWalletModal();
+  const queryClient = useQueryClient();
 
   const bigIntTransactionIndex = BigInt(transactionIndex);
   const connection = new Connection(rpcUrl, { commitment: 'confirmed' });
@@ -104,8 +107,11 @@ const ChangeThresholdInput = ({
     toast.loading('Confirming...', {
       id: 'transaction',
     });
-    await connection.getSignatureStatuses([signature]);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const sent = await waitForConfirmation(connection, [signature]);
+    if (!sent[0]) {
+      throw `Transaction failed or unable to confirm. Check ${signature}`;
+    }
+    await queryClient.invalidateQueries({ queryKey: ['transactions'] });
   };
   return (
     <div>

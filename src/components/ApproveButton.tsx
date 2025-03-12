@@ -6,6 +6,7 @@ import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import { toast } from 'sonner';
 import { useMultisigData } from '@/hooks/useMultisigData';
 import { useQueryClient } from '@tanstack/react-query';
+import { waitForConfirmation } from '../lib/transactionConfirmation';
 
 type ApproveButtonProps = {
   multisigPda: string;
@@ -68,8 +69,10 @@ const ApproveButton = ({
     toast.loading('Confirming...', {
       id: 'transaction',
     });
-    await connection.getSignatureStatuses([signature]);
-    await new Promise((resolve) => setTimeout(resolve, 5000));
+    const sent = await waitForConfirmation(connection, [signature]);
+    if (!sent[0]) {
+      throw `Transaction failed or unable to confirm. Check ${signature}`;
+    }
     await queryClient.invalidateQueries({ queryKey: ['transactions'] });
   };
   return (

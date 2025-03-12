@@ -41,7 +41,6 @@ const ConfigurationPage = () => {
                         </div>
                         <div className="ml-auto">
                           <RemoveMemberButton
-                            rpcUrl={rpcUrl || clusterApiUrl('mainnet-beta')}
                             memberKey={member.key.toBase58()}
                             multisigPda={multisigAddress!}
                             transactionIndex={

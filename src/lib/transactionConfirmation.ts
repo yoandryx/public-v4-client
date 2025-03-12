@@ -16,7 +16,11 @@ export async function waitForConfirmation(
         latestStatuses = response.value; // Store latest response
 
         // Check if the signatures are confirmed
-        if (latestStatuses.every((status) => status?.confirmationStatus === 'confirmed')) {
+        if (
+          latestStatuses.every(
+            (status) => !status?.err && status?.confirmationStatus === 'confirmed'
+          )
+        ) {
           return resolve(latestStatuses);
         }
 
