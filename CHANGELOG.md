@@ -5,6 +5,15 @@
 
 * **lockfile:** updated lockfile ([c8e1b4a](https://github.com/Squads-Protocol/public-v4-client/commit/c8e1b4a3d209b7c1c3cfc4d9e7edb8e187e22833))
 
+## [1.2.3](https://github.com/Squads-Protocol/public-v4-client/compare/v1.2.2...v1.2.3) (2025-03-13)
+
+
+### Bug Fixes
+
+* **babel:** dependabot alert ([e5c7392](https://github.com/Squads-Protocol/public-v4-client/commit/e5c7392313bd2baacc1990284238fa2cfa8846ec))
+* **threshold-input:** adjusted form display ([9bd7bf1](https://github.com/Squads-Protocol/public-v4-client/commit/9bd7bf1bed3ee95759973a4868544b2d64d65d1d))
+* **threshold:** updated threshold form and component props ([4ba207a](https://github.com/Squads-Protocol/public-v4-client/commit/4ba207a325964effad05efa1facaa22dc34658e9))
+
 ## [1.2.2](https://github.com/Squads-Protocol/public-v4-client/compare/v1.2.1...v1.2.2) (2025-03-12)
 
 
