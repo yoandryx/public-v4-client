@@ -67,5 +67,10 @@
     "webpack-cli": "6.0.1",
     "webpack-dev-server": "5.2.0",
     "webpack-manifest-plugin": "5.0.0"
+  },
+  "resolutions": {
+    "@babel/runtime": "7.26.10",
+    "@babel/helpers": "7.26.10",
+    "@babel/core": "7.26.10"
   }
 }
