@@ -11,20 +11,14 @@ import invariant from 'invariant';
 import { types as multisigTypes } from '@sqds/multisig';
 import { waitForConfirmation } from '../lib/transactionConfirmation';
 import { useQueryClient } from '@tanstack/react-query';
+import { useMultisigData } from '../hooks/useMultisigData';
 
 type ChangeThresholdInputProps = {
   multisigPda: string;
   transactionIndex: number;
-  rpcUrl: string;
-  programId: string;
 };
 
-const ChangeThresholdInput = ({
-  multisigPda,
-  transactionIndex,
-  rpcUrl,
-  programId,
-}: ChangeThresholdInputProps) => {
+const ChangeThresholdInput = ({ multisigPda, transactionIndex }: ChangeThresholdInputProps) => {
   const { data: multisigConfig } = useMultisig();
   const [threshold, setThreshold] = useState('');
   const wallet = useWallet();
@@ -32,7 +26,7 @@ const ChangeThresholdInput = ({
   const queryClient = useQueryClient();
 
   const bigIntTransactionIndex = BigInt(transactionIndex);
-  const connection = new Connection(rpcUrl, { commitment: 'confirmed' });
+  const { connection, programId } = useMultisigData();
 
   const countVoters = (members: multisig.types.Member[]) => {
     return members.filter(
@@ -118,7 +112,7 @@ const ChangeThresholdInput = ({
       <Input
         placeholder={multisigConfig ? multisigConfig.threshold.toString() : ''}
         type="text"
-        onChange={(e) => setThreshold(e.target.value)}
+        onChange={(e) => setThreshold(e.target.value.trim())}
         className="mb-3"
       />
       <Button
