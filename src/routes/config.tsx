@@ -82,7 +82,9 @@ const ConfigurationPage = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <span>Current Threshold: {multisigConfig ? multisigConfig.threshold : ''}</span>
+                {multisigConfig ? (
+                  <span>Current Threshold: {multisigConfig.threshold} </span>
+                ) : null}
                 <ChangeThresholdInput
                   multisigPda={multisigAddress!}
                   transactionIndex={
